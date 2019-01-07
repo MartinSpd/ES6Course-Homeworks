@@ -10,8 +10,8 @@ function timeAdder(value1, label1, value2, label2) {
         // exit if one of times is lower than 0 
         // or one of units is invalid
         if ((value1<0 || value2<0) && 
-        (label1 != null || undefined) && 
-        (label2 != null || undefined)) {
+        (label1 !== null || undefined) && 
+        (label2 !== null || undefined)) {
             console.log('both time values must be higher' +
                 ' than zero and time units correct.'); 
             return;
@@ -35,6 +35,25 @@ function timeAdder(value1, label1, value2, label2) {
         weight: null
     };
 
+    const time3 = {
+        value: 0,
+        units: null,
+        multiplyToSeconds: 0,
+        seconds: null,
+        minutes: null,
+        hours: null,
+        days: null
+    };
+
+    const divideBy = {
+        seconds: 1,
+        minutes: 1,
+        hours: 1,
+        days: 1
+
+    };
+
+
     /**
      * sets weight to time units - equals to index in an
      * array in multiplyUnits (used for multiplication in 
@@ -55,6 +74,7 @@ function timeAdder(value1, label1, value2, label2) {
                 return;
         }
     }
+
 
     /**
      *  counts summary of times, but first it converts higher
@@ -77,25 +97,97 @@ function timeAdder(value1, label1, value2, label2) {
         // assign result
         value3 = timeObj1.value + 
             (timeObj2.value * multiplication);
-        
-            // in case of edge case value and label change 
-            // to higher unit
-            if ((label3 === 'seconds') && (value3 === 60)) {
-                value3 = 1; label3 = 'minutes';
-            }
-        
-            if ((label3 === 'minutes') && (value3 === 60)) {
-                value3 = 1; label3 = 'hours';
-            }
-        
-            if ((label3 === 'hours') && (value3 === 24)) {
-                value3 = 1; label3 = 'days';
-            }
+        time3.value = value3;
+        time3.units = label3;
+
+
+        // recalculate summed time to seconds
+        toSeconds();
+
 
         // write out and returns value with label
         console.log(value3 + ' ' + label3);
 
         return [value3, label3];
+    }
+
+
+    /**
+     * Recalculate sum of both values to seconds
+     * after that it counts days, hours, minutes
+     * and seconds
+     */
+    function toSeconds() {
+        if (time3.units === 'minutes') {
+            time3.value *= multiplyUnitsBy[1];
+        }
+        if (time3.units === 'hours') {
+            time3.value *= multiplyUnitsBy[1] * 
+                multiplyUnitsBy[2];
+        }
+        if (time3.units === 'days') {
+            time3.value *= multiplyUnitsBy[1] * 
+                multiplyUnitsBy[2] * multiplyUnitsBy[3];
+        }
+        time3.units = 'seconds';
+
+        Recalculate();
+    }
+    
+    function Recalculate() {
+
+        let rest
+        // set division ammount
+        if (divideBy.minutes === 'minutes') {
+            divideBy.minutes *= multiplyUnitsBy[1];
+        }
+        if (divideBy.hours === 'hours') {
+            divideBy.hours *= multiplyUnitsBy[1] * 
+                multiplyUnitsBy[2];
+        }
+        if (divideBy.days === 'days') {
+            divideBy.days *= multiplyUnitsBy[1] * 
+                multiplyUnitsBy[2] * multiplyUnitsBy[3];
+        }
+
+        // gets number of days from seconds
+        time3.days = Number.parseInt(
+            time3.value / divideBy.days);
+        // gets number of hours from seconds (count days and
+        // substract number of hours in days)
+        time3.hours = Number.parseInt(
+            (time3.value / divideBy.hours) - (time3.days * 
+                multiplyUnitsBy[3])
+            );
+        // gets number of minutes from seconds (count days and
+        // hours and substract number of minutes in days and 
+        // hours)
+        time3.minutes = Number.parseInt(
+            (time3.value / divideBy.minutes) - (time3.days * 
+                multiplyUnitsBy[3] + time3.hours * 
+                multiplyUnitsBy[2])
+            );
+        // gets number of minutes from seconds (count days and
+        // hours and substract number of minutes in days, hours 
+        // and minutes)
+        time3.seconds = Number.parseInt(
+            (time3.value / divideBy.seconds) - (time3.days * 
+                multiplyUnitsBy[3] + time3.hours * 
+                multiplyUnitsBy[2] + time3.minutes * 
+                multiplyUnitsBy[1])
+            );
+
+        console.log(
+            `Summary of ${time1.value} ${time1.units} and ${time2.
+            value} ${time2.units} is:`);
+            if (time3.days > 0) {
+                console.log(`${time3.days} day(s),`); }
+            if (time3.hours > 0) {
+                console.log(`${time3.hours} hour(s),`); }
+            if (time3.minutes > 0) {
+                console.log(`${time3.minutes} minute(s),`); }
+            if (time3.seconds > 0) {
+                console.log(` ${time3.seconds} second(s).`); }
     }
 
     // set weight for time objects
