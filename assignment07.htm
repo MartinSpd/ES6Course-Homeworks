@@ -1,0 +1,104 @@
+
+<!--
+   Homework assignment #7: The DOM
+-->
+
+<HTML>
+      <HEAD>
+         <TITLE>My favorite colors</TITLE>
+         <style type="text/css">
+         <!--
+            body {
+               font: normal 12pt Tahoma;
+               color: black;
+            }
+            
+            h1 {
+               font: normal 18pt Tahoma;
+               color: darkred;
+            }
+      
+            h2 {
+               font: normal 14pt Tahoma;
+               color: darkblue;
+            }
+      
+            pre {
+               font: normal 10pt Tahoma;
+            }
+            
+            .colorRectangle {
+               border: 1px solid black;
+            }
+      
+            #rectangleWrapper {
+               padding: 50px 50px 0px 50px;
+            }
+      
+            #id01 { background-color: #ffffff; }
+            #id02 { background-color: #000000; }
+            #id03 { background-color: #5cb8e7; }
+            #id04 { background-color: #c150ff; }
+            #id05 { background-color: #79ff7a; }
+            #id06 { background-color: #e9ddb3; }
+            #id07 { background-color: #fea28b; }
+            #id08 { background-color: #ff5f31; }
+            #id09 { background-color: #ffe26d; }
+            #id10 { background-color: #ff5f31; }
+         -->
+         </style>
+         <script language="Javascript">
+      
+            function listRectangleIDs() {
+      
+            //console.log rectangleIDs;
+            console.log('Here are the rectangle IDs');
+            let i = 1;
+               while (true) {
+      
+                  // 1. build an id
+                  let colorId;
+                     if  (i < 10) colorId = 'id0'+i;
+                        else colorId = 'id'+i;
+      
+                  // 2. write out IDs if an element with ID exist
+                  if (document.getElementById(colorId) != null || 
+                     undefined) {
+                     console.log(colorId);
+                     i++;
+                  }
+                  else { break; } // break if an element doesn''t exist
+               }
+            }
+         </script>
+      </HEAD>
+      <BODY onload="listRectangleIDs()">
+         <h1>My favorite colors</h1>
+         <h2>on the page you can find list of my favorite colors</h2>
+         <div id="rectangleWrapper">
+            <span id="id01" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id02" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id03" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id04" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id05" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id06" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id07" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id08" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id09" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <span id="id10" class="colorRectangle">
+               &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;</span>&nbsp;
+            <pre>#ffffff #000000 #5cb8e7 #c150ff #79ff7a #e9ddb3 #fea28b #ff5f31 #ffe26d #ff5f31 </pre>
+         </div>
+      </BODY>
+      </HTML>
+      
+      
