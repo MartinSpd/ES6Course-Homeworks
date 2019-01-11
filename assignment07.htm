@@ -52,22 +52,11 @@
             function listRectangleIDs() {
       
             //console.log rectangleIDs;
-            console.log('Here are the rectangle IDs');
-            let i = 1;
-               while (true) {
-      
-                  // 1. build an id
-                  let colorId;
-                     if  (i < 10) colorId = 'id0'+i;
-                        else colorId = 'id'+i;
-      
-                  // 2. write out IDs if an element with ID exist
-                  if (document.getElementById(colorId) != null || 
-                     undefined) {
-                     console.log(colorId);
-                     i++;
-                  }
-                  else { break; } // break if an element doesn''t exist
+            const allRectangles = document.body.getElementsByClassName
+               ('rectangleWrapper').getElementsByTagName('span');
+
+               for (const prop of allRectangles) {
+                  console.log(prop.id);
                }
             }
          </script>
