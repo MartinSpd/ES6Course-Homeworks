@@ -1,0 +1,64 @@
+
+/**
+   Homework Assignment #8: Events
+   
+ */
+
+ table {
+   border: 3px solid rgb(65, 65, 65);
+   border-spacing: 0px;
+   color: black;
+   font: normal 12pt Tahoma;
+}
+
+td {
+   font: bold 40pt Arial;
+   height: 65px;
+   padding: 30px 10px 30px 40px;
+   width: 65px;
+}
+
+.ex {
+   color: red;
+   padding: 30px 10px 30px 40px;
+}
+
+.ou {
+   color: black;
+   padding: 30px 10px 30px 40px;
+}
+
+#C1, #C4 {
+   border-top: 0px solid black;
+   border-right: 3px solid black;
+   border-bottom: 3px solid black;
+   border-left: 0px solid black;
+}
+
+#C2, #C5 {
+   border-top: 0px solid black;
+   border-right: 0px solid black;
+   border-bottom: 3px solid black;
+   border-left: 0px solid black;
+}
+
+#C3, #C6 {
+   border-top: 0px solid black;
+   border-right: 0px solid black;
+   border-bottom: 3px solid black;
+   border-left: 3px solid black;
+}
+
+#C7 {
+   border-top: 0px solid black;
+   border-right: 3px solid black;
+   border-bottom: 0px solid black;
+   border-left: 0px solid black;
+}
+
+#C9 {
+   border-top: 0px solid black;
+   border-right: 0px solid black;
+   border-bottom: 0px solid black;
+   border-left: 3px solid black;
+}
