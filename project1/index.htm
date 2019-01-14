@@ -1,0 +1,76 @@
+<!--
+   Project #1: TODO List
+-->
+  
+<HTML>
+  <HEAD>
+      <TITLE>Project #1: TODO List</TITLE>
+      <style type="text/css" src="styles.css">
+      </style>
+      <script language="Javascript" src="project1.js" ></script>
+  </HEAD>
+  <BODY>
+
+    <div id="index" class="show">
+      <h1>TODO List</h1>
+      <span>A simple TODO list. Create an account or sign in to
+        see list.
+      </span><br />
+      <form id="form1">
+        <button id="signup1" onclick="goSignUp()">Sign Up</button>
+        <button id="login1" onclick="goLogIn()">Log In</button>
+      </form>
+    </div>
+
+    <div id="signup" class="hide">
+      <h2>Sign Up</h2>
+      <span>Create an account.</span>
+      <br /><br />
+      <form id="form2">
+        <input type="text" id="first"/><br />
+        <input type="text" id="last"/><br />
+        <input type="text" id="email1"/><br />
+        <input type="password" id="pass1"/><br /><br />
+        <label><input type="checkbox" id="terms"/>
+          I agree to the Terms of Use</label>
+        <br /><br /><br />
+        <button id="signup2" onclick="signUpCheck()">Sign Up</button>
+      </form>
+      <p id="message1"></p>
+    </div>
+
+    <div id="login" class="hide">
+      <h2>Log In</h2>
+      <span>Log in to see your TODO lists.</span><br />
+      <form id="form3">
+        <input type="text" id="email2"/><br />
+        <input type="password" id="pass2"/>
+        <br /><br /><br />
+        <button id="login2" onclick="logInCheck();">Log In</button>
+      </form>
+      <p id="message2"></p>
+    </div>
+    
+    <div id="dashboard" class="hide">
+     <h2>Dashboard</h2>
+        <form id="form3">
+          <button id="settings_btn1" onclick="goSettings();">Settings</button>
+          <button id="logout1" onclick="goIndex();">Log Out</button>
+      </form>
+    </div>
+    
+    <div id="settings" class="hide">
+     <h2>Settings</h2>
+        <form id="form4">
+          <input type="text" id="first2"/><br />
+          <input type="text" id="last2"/><br />
+          <input type="text" id="email3"/><br />
+          <input type="password" id="pass3"/><br /><br />
+
+          <button id="logout2" onclick="goIndex();">Log Out</button>
+          <button id="cancel" onclick="goDashboard();">Cancel</button>
+          <button id="save_settings" onclick="saveSettings();">Save changes</button>
+      </form>
+    </div>
+  </BODY>
+</HTML>
