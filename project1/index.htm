@@ -5,12 +5,14 @@
 <HTML>
   <HEAD>
       <TITLE>Project #1: TODO List</TITLE>
-      <style type="text/css" src="styles.css">
+      <!--style type="text/css" src="styles.css">
       </style>
-      <script language="Javascript" src="project1.js" ></script>
+      <script language="Javascript" src="project1.js" ></script-->
   </HEAD>
   <BODY>
 
+
+    <!-- DEFAULT DIV: INDEX -->
     <div id="index" class="show">
       <h1>TODO List</h1>
       <span>A simple TODO list. Create an account or sign in to
@@ -22,6 +24,8 @@
       </form>
     </div>
 
+
+    <!-- SIGN UP FORM -->
     <div id="signup" class="hide">
       <h2>Sign Up</h2>
       <span>Create an account.</span>
@@ -39,6 +43,8 @@
       <p id="message1"></p>
     </div>
 
+
+    <!-- LOGIN FORM -->
     <div id="login" class="hide">
       <h2>Log In</h2>
       <span>Log in to see your TODO lists.</span><br />
@@ -51,15 +57,64 @@
       <p id="message2"></p>
     </div>
     
-    <div id="dashboard" class="hide">
+    
+    <!-- DASHBOARD AFTER LOGIN OR SIGNUP -->
+    <div id="dashboard" class="show">
      <h2>Dashboard</h2>
         <form id="form3">
-          <button id="settings_btn1" onclick="goSettings();">Settings</button>
+          <!-- buttons: settings, create new, log out -->
+          <button id="settings_btn1" onclick="goSettings();">
+            Settings</button>
+          <button id="settings_btn1" onclick="newTODO();">
+            New TODO list</button>
           <button id="logout1" onclick="goIndex();">Log Out</button>
       </form>
+      <br /><br /><br />
+      
+      <!-- div where user lists write out -->
+      <div id="listsDiv" class="show">
+        <h3>recently created lists</h3>
+          <!-- links to lists -->
+          <div id="listOfLists">
+            <a href="">ListName</a>,
+            <!-- current (selected) list -->
+            <div id="selectedList">
+              <br /><br />
+              
+              <table id="tab" border width=500>
+                <tr>
+                  <td id="tableCaption">
+                    ListName
+                  </td>
+                </tr>
+                <tr>
+                  <td id="selectedListItems">
+                    <ul>
+                      <li>
+                        <label id="label1"><input type="checkbox" id="item1">
+                    label1</label>
+                      </li>
+                      <li>
+                        <label id="label2"><input type="checkbox" id="item2">
+                    label2</label>
+                      </li>
+                      <li>
+                        <label id="label3"><input type="checkbox" id="item3">
+                    label3</label>
+                      </li>
+                    </ul>
+                  </td>
+                </tr>
+              </table>
+              
+            </div>
+          </div>
+      </div>
     </div>
     
-    <div id="settings" class="hide">
+    
+    <!-- SETTINGS FORM -->
+    <div id="settings" class="show">
      <h2>Settings</h2>
         <form id="form4">
           <input type="text" id="first2"/><br />
@@ -69,7 +124,8 @@
 
           <button id="logout2" onclick="goIndex();">Log Out</button>
           <button id="cancel" onclick="goDashboard();">Cancel</button>
-          <button id="save_settings" onclick="saveSettings();">Save changes</button>
+          <button id="save_settings" onclick="saveSettings();">
+            Save changes</button>
       </form>
     </div>
   </BODY>

@@ -18,3 +18,12 @@ h2 { font: bold 14pt Tahoma; }
 .hide { display: none; }
 
 #message1, #message2 { color: red; }
+
+#logout1, #logout2 {
+    float: right;
+    position: relative;
+}
+
+#logout1 { top: -30px; }
+
+#logout2 { top: -120px; }

@@ -104,7 +104,7 @@ function checkIfWon() {
     }
     
     // check if noone won
-    if ((clickCount === 9) && (!won)) { console.log('dnu');
+    if ((clickCount === 9) && (!won)) {
         window.alert('Cats game!');
         end = true;
         clickCount = 0;

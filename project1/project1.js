@@ -5,23 +5,24 @@
 
   */
 
-  let todoUsersDB = [];
-  let todoListDB = [];
-  let currentUser = [];
-//   let userLists = [];
-//   let items = [];
+  // global variables for JSON variables - user and todo list
+  let newUser = { userId: 0, firstName: '', lastName: '', email: '', password: '' };
+  let list = { userId: 0, listName: '', items: [], done: [] };
 
-  let newUser = { firstName: '', lastName: '', email: '', password: '' };
-//   let [{ todoName, items }] = userList;
-//   { firstName, lastName, email, password } = newUser;
-//   let { credentials, userLists } = todoList;
+  let currentUser = newUser;
+  let todoUsersDB = [], todoListDB = [];
   let storage = window.localStorage;
 
+  // global variables for functions showing and hiding DIVs
   const index = document.getElementById('index');
   const signup = document.getElementById('signup');
   const login = document.getElementById('login');
   const dashboard = document.getElementById('dashboard');
+  const settings = document.getElementById('settings');
+  // const newList = document.getElementById('newList');
 
+
+// prevents default behaviour - redirecting from form after pressing button
 document.getElementById('signup1').addEventListener('click', function(event){
   event.preventDefault();
 });
@@ -50,6 +51,10 @@ document.getElementById('save_settings').addEventListener('click', function(even
   event.preventDefault();
 });
 
+
+
+// FUNCTIONS TO SHOW AND HIDE DIVs
+//
 
   /**
    * shows home screen form
@@ -117,6 +122,25 @@ document.getElementById('save_settings').addEventListener('click', function(even
 
 
   /**
+   * toggle classes if class is show class changes to hide and
+   * vice versa
+   */
+
+  function toggleClasses(id) {
+
+    let element = document.getElementById(id);
+      if (element.className === 'show') {
+          element.className = 'hide';
+      } else { element.className = 'show'; }
+  }
+
+
+
+// CHECKING ENTERED DATA IN TEXT FIELDS - IF ARE EMPTY AND
+// HELPER FUNCTIONS FOR SIGN UP AND LOGIN SCREENS
+//
+
+  /**
    * Sign up check
    * 
    */
@@ -172,39 +196,6 @@ document.getElementById('save_settings').addEventListener('click', function(even
 
 
   /**
-   * saving new user to localStorage - called if there are all data entered
-   * 
-   */
-  function saveNewUser(user) {
-    newUser.firstName = user[0];
-    newUser.lastName = user[1];
-    newUser.email = user[2];
-    newUser.password = user[3];
-
-//     todoUsersDB = getAllUsers().push(newUser);
-//     storage.setItem('P1_todoUsersDB', todoUsersDB);
-    goDashboard();
-  }
-
-
-  /**
-   * saving user data to localStorage
-   * 
-   */
-  function saveSettings() {
-    
-    const user = getCurrentUser(currentUser);
-    newUser.firstName = document.getElementById('first2').value;
-    newUser.lastName = document.getElementById('last2').value;
-    newUser.email = document.getElementById('email3').value;
-    newUser.password = document.getElementById('pass3').value;
-
-//     todoUsersDB = getAllUsers().push(newUser);
-//     storage.setItem('P1_todoUsersDB', todoUsersDB);
-  }
-
-
-  /**
    * getting user from localStorage and check if entered data match some user
    * 
    */
@@ -228,7 +219,7 @@ document.getElementById('save_settings').addEventListener('click', function(even
         } else {
           
           // search which data are faulty, if email or password
-          let mail = true; passw = true;
+          let mail = true, passw = true;
             for (let user of allUsers) {
                 if (user.email !== user[0]) {
                     mail = false;
@@ -272,24 +263,59 @@ document.getElementById('save_settings').addEventListener('click', function(even
    * 
    */
   function getCurrentUser(user) {
-    currentUser[0] = user[0];
-    currentUser[1] = user[1];
-    currentUser[2] = user[2];
-    currentUser[3] = user[3];
+    currentUser.firstName = user[0];
+    currentUser.lastName = user[1];
+    currentUser.email = user[2];
+    currentUser.password = user[3];
+
+    return currentUser;
+  }
+  
+
+
+// SAVING NEW DATA - USER, LIST, SETTINGS
+//
+
+
+  /**
+   * saving new user to localStorage - called if there are all data entered
+   * 
+   */
+  function saveNewUser(user) {
+    newUser.firstName = user[0];
+    newUser.lastName = user[1];
+    newUser.email = user[2];
+    newUser.password = user[3];
+
+//     todoUsersDB = getAllUsers().push(newUser);
+//     storage.setItem('P1_todoUsersDB', todoUsersDB);
+    goDashboard();
   }
 
 
   /**
-   * toggle classes if class is show class changes to hide and
-   * vice versa
+   * saving user data to localStorage
+   * 
    */
+  function saveSettings() {
+    
+    const user = getCurrentUser(currentUser);
+    newUser.firstName = document.getElementById('first2').value;
+    newUser.lastName = document.getElementById('last2').value;
+    newUser.email = document.getElementById('email3').value;
+    newUser.password = document.getElementById('pass3').value;
 
-  function toggleClasses(id) {
+//     todoUsersDB = getAllUsers().push(newUser);
+//     storage.setItem('P1_todoUsersDB', todoUsersDB);
+  }
 
-    let element = document.getElementById(id);
-      if (element.className === 'show') {
-          element.className = 'hide';
-      } else { element.className = 'show'; }
+
+  /**
+   * function to create new TODO list
+   * 
+   */
+  function newTODO(user) {
+    //
   }
 
   /*
