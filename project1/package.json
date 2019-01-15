@@ -1,0 +1,12 @@
+{
+  "name": "ES6-course-project-1",
+  "version": "0.0.0",
+  "description": "Simple single site application using localStorage for TODO list management",
+  "main": "index.htm",
+  "repository": "https://github.com/MartinSpd/ES6Course-Homeworks/tree/master/project1",
+  "author": "Martin Spodniak",
+  "license": "MIT",
+  "dependencies": {
+    "crypto-js": "^3.1.9-1"
+  }
+}

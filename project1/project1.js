@@ -318,7 +318,7 @@ document.getElementById('save_settings').addEventListener('click', function(even
     //
   }
 
-  /*
+/*
   Details:
  
 Create a simple "to-do list" application, using client-side HTML, CSS, and Javascript only. This application should store its data using 
