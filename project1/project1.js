@@ -1,16 +1,176 @@
 'use strict';
 
+// //////////////////////////////////////
+// DEMO DATA - USERS
+  const demoUsers = [
+    { 
+      userId: 1, firstName: 'John', lastName: 'Doe', 
+      email: 'john.doe@example.com', password: '123'
+    },
+    { 
+      userId: 2, firstName: 'Jane', lastName: 'Doe', 
+      email: 'jane.doe@example.com', password: '456'
+    },
+    { 
+      userId: 3, firstName: 'Jill', lastName: 'Doe', 
+      email: 'jilldoe@example.com', password: '789'
+    },
+    { 
+      userId: 4, firstName: 'Jon', lastName: 'Doe', 
+      email: 'jondoe@example.com', password: '000'
+    }
+  ];
+  
+  
+// DEMO NOTES
+  const demoNotes = [
+    {
+      userId: 3,
+      listId: 1, 
+      listName: 'to buy', 
+      items: [
+        { value: 'go groceries', done: false },
+        { value: 'buy iPhone', done: false },
+        { value: 'task #3', done: true },
+        { value: 'buy new stuff', done: true },
+        { value: 'task #5', done: false },
+        { value: 'take car to service', done: true }
+      ]
+    },
+    {
+      userId: 2,
+      listId: 2, 
+      listName: 'miscaleous #1', 
+      items: [
+        { value: 'task #7', done: true },
+        { value: 'task #8', done: true }
+      ]
+    },
+    {
+      userId: 2,
+      listId: 3, 
+      listName: 'misc #2', 
+      items: [
+        { value: 'task #9', done: true },
+        { value: 'task #10', done: true },
+        { value: 'task #11', done: false }
+      ]
+    },
+    {
+      userId: 3,
+      listId: 4, 
+      listName: 'dayly routine', 
+      items: [
+        { value: 'task #12', done: false },
+        { value: 'task #13', done: true },
+        { value: 'task #14', done: true },
+        { value: 'task #15', done: true },
+        { value: 'task #16', done: false }
+      ]
+    },
+    {
+      userId: 3,
+      listId: 5, 
+      listName: 'vacation plans', 
+      items: [
+        { value: 'Espana y Portugal 2019', done: false }
+      ]
+    },
+    {
+      userId: 1,
+      listId: 6, 
+      listName: 'List #6', 
+      items: [
+        { value: 'task #17', done: true },
+        { value: 'task #18', done: true },
+        { value: 'task #19', done: true }
+      ]
+    },
+    {
+      userId: 3,
+      listId: 7, 
+      listName: 'List #7', 
+      items: [
+        { value: 'task #20', done: true },
+        { value: 'task #21', done: false },
+        { value: 'task #22', done: true },
+        { value: 'task #23', done: true },
+        { value: 'task #24', done: false }
+      ]
+    },
+    {
+      userId: 2,
+      listId: 8, 
+      listName: 'TODO @ home', 
+      items: [
+        { value: 'clean up', done: true },
+        { value: 'task #26', done: false }
+      ]
+    },
+    {
+      userId: 1,
+      listId: 9, 
+      listName: 'Summer Plans - TODOs', 
+      items: [
+        { value: 'Where to Go', done: false },
+        { value: 'Transport', done: true },
+        { value: 'Accomodation', done: false },
+        { value: 'Points of Interest', done: false }
+      ]
+    },
+    {
+      userId: 3,
+      listId: 10, 
+      listName: 'Work Tasks', 
+      items: [
+        { value: 'task #31', done: false },
+        { value: 'task #32', done: false },
+        { value: 'task #33', done: false },
+        { value: 'task #34', done: false }
+      ]
+    },
+    {
+      userId: 1,
+      listId: 11, 
+      listName: 'List #11', 
+      items: [
+        { value: 'task #35', done: true }
+      ]
+    },
+    {
+      userId: 2,
+      listId: 12, 
+      listName: 'Various', 
+      items: [
+        { value: 'task #36', done: true },
+        { value: 'task #37', done: true },
+        { value: 'task #38', done: false }
+      ]
+    }
+  ];
+  
+  window.localStorage.removeItem('P1_todoUsersDB');
+  window.localStorage.removeItem('P1_todoNotesDB');
+  window.localStorage.setItem(
+    'P1_todoUsersDB', JSON.stringify(demoUsers));
+  window.localStorage.setItem(
+    'P1_todoNotesDB', JSON.stringify(demoNotes));
+  // //////////////////////////////////////
+
   /*
       Project #1
 
   */
 
-  // global variables for JSON variables - user and todo list
-  let newUser = { userId: 0, firstName: '', lastName: '', email: '', password: '' };
-  let list = { userId: 0, listName: '', items: [], done: [] };
+  // global JSON variables - user and todo list
+  const newUser = { userId: 0, firstName: '', lastName: '', email: '', password: '' };
+  const userList = { userId: 0, listId: 0, listName: '', items: [] };
+  const listItem = { value: '', done: false };
 
   let currentUser = newUser;
   let todoUsersDB = [], todoListDB = [];
+  let userLists = [], currentListItems = [];
+  let listUserListsCaptions = [];
   let storage = window.localStorage;
 
   // global variables for functions showing and hiding DIVs
@@ -22,33 +182,66 @@
   // const newList = document.getElementById('newList');
 
 
-// prevents default behaviour - redirecting from form after pressing button
+// prevents default behaviour - redirecting from form after 
+// pressing button and assigning function to trigger
 document.getElementById('signup1').addEventListener('click', function(event){
   event.preventDefault();
+  goSignUp();
 });
 document.getElementById('login1').addEventListener('click', function(event){
   event.preventDefault();
+  goLogIn();
 });
 document.getElementById('signup2').addEventListener('click', function(event){
   event.preventDefault();
+  signUpCheck();
 });
 document.getElementById('login2').addEventListener('click', function(event){
   event.preventDefault();
+  logInCheck();
+    if (dashboard.className === 'show') { loadUserLists(); }
 });
 document.getElementById('logout1').addEventListener('click', function(event){
   event.preventDefault();
+  goIndex();
+  logoutPurge();
 });
 document.getElementById('logout2').addEventListener('click', function(event){
   event.preventDefault();
+  goIndex();
+  logoutPurge();
 });
-document.getElementById('settings_btn1').addEventListener('click', function(event){
+document.getElementById('userSettings').addEventListener('click', function(event){
   event.preventDefault();
+  goSettings();
+  loadSettings();
+});
+document.getElementById('createList').addEventListener('click', function(event){
+  event.preventDefault();
+  listInit();
 });
 document.getElementById('cancel').addEventListener('click', function(event){
   event.preventDefault();
+  goDashboard();
+  //nacitaj listy
 });
-document.getElementById('save_settings').addEventListener('click', function(event){
+document.getElementById('saveSettings').addEventListener('click', function(event){
   event.preventDefault();
+  goDashboard();
+  saveSettings();
+  // nacitaj listy
+});
+document.getElementById('editListCaption').addEventListener('click', function(event){
+  event.preventDefault();
+  editListCaptions();
+});
+document.getElementById('addItem').addEventListener('click', function(event){
+  event.preventDefault();
+  addNewItem();
+});
+document.getElementById('saveList').addEventListener('click', function(event){
+  event.preventDefault();
+  saveList();
 });
 
 
@@ -160,6 +353,7 @@ document.getElementById('save_settings').addEventListener('click', function(even
                 if ((pass.value !== '')) {
                     if ((terms.checked)) {
 
+                        message.innerText = '';
                         let formData = [fName.value, lName.value, 
                                         email.value, pass.value];
                         saveNewUser(formData);
@@ -186,8 +380,7 @@ document.getElementById('save_settings').addEventListener('click', function(even
 
       if ((email.value !== '')) {
           if ((pass.value !== '')) {
-
-              let formData = [email, pass];
+              let formData = [email.value, pass.value];
               userExists(formData);
 
           } else { message.innerText = 'Fill up password'; }
@@ -196,35 +389,44 @@ document.getElementById('save_settings').addEventListener('click', function(even
 
 
   /**
-   * getting user from localStorage and check if entered data match some user
+   * getting user from localStorage and check if entered data 
+   * match some user
    * 
    */
-  function userExists(user) {
+  function userExists(loggingUser) {
 
     let allUsers = getAllUsers();
     const message = document.getElementById('message2');
     
-      for (let user of allUsers) {
-        if ((user.email === user[0]) && (user.password === user[1])) {
+    if (allUsers !== null || undefined) {
+    
+      for (let i=0;i<allUsers.length;i++) {
+        
+        if ((allUsers[i].email === loggingUser[0]) && 
+            (allUsers[i].password === loggingUser[1])) {
           // saves data of current user to variable and returns it
-          const userFirstName = user.firstName;
-          const userLastName = user.lastName;
-          const userEmail = user.email;
-          const userPassword = user.password;
-          const curUser = [userFirstName, userLastName, 
-                               userEmail, userPassword];
+          const userId = allUsers[i].userId;
+          const userFirstName = allUsers[i].firstName;
+          const userLastName = allUsers[i].lastName;
+          const userEmail = allUsers[i].email;
+          const userPassword = allUsers[i].password;
+          const curUser = [userId, userFirstName, userLastName, 
+                            userEmail, userPassword];
           getCurrentUser(curUser);
-          goDashboard();
           break;
-        } else {
+        } 
+          else {
           
           // search which data are faulty, if email or password
           let mail = true, passw = true;
-            for (let user of allUsers) {
-                if (user.email !== user[0]) {
+          
+            for (let i=0;i<allUsers.length;i++) {
+                if ((allUsers[i].email !== loggingUser[0]) &&
+                    (allUsers[i].password === loggingUser[1])) {
                     mail = false;
                 }
-                if (user.password !== user[1]) {
+                if ((allUsers[i].email === loggingUser[0]) &&
+                    (allUsers[i].password !== loggingUser[1])) {
                     passw = false;
                 }
             }
@@ -238,22 +440,24 @@ document.getElementById('save_settings').addEventListener('click', function(even
               }
               else { message.innerText = 'There is no such user. Enter correct data.'; }
             
+            // clean up message
+            if (mail && passw) { message.innerText = ''; }
         }
       }
-//     todoUsersDB = getAllUsers().push(newUser);
-//     storage.setItem('P1_todoUsersDB', todoUsersDB);
+    } else { alert('no users in localStorage.'); }
     
   }
 
 
   /**
-   * gets list of users from localStorage - used to save new user or to login
+   * gets list of users from localStorage - used to save new 
+   * user or to login
    * 
    */
   function getAllUsers() {
     let todoUsersDB = storage.getItem('P1_todoUsersDB');
 
-      if (todoUsersDB) { return todoUsersDB; }
+      if (todoUsersDB) { return JSON.parse(todoUsersDB); }
         else { return []; }
   }
 
@@ -263,10 +467,12 @@ document.getElementById('save_settings').addEventListener('click', function(even
    * 
    */
   function getCurrentUser(user) {
-    currentUser.firstName = user[0];
-    currentUser.lastName = user[1];
-    currentUser.email = user[2];
-    currentUser.password = user[3];
+    
+    currentUser.userId = user[0];
+    currentUser.firstName = user[1];
+    currentUser.lastName = user[2];
+    currentUser.email = user[3];
+    currentUser.password = user[4];
 
     return currentUser;
   }
@@ -278,18 +484,37 @@ document.getElementById('save_settings').addEventListener('click', function(even
 
 
   /**
-   * saving new user to localStorage - called if there are all data entered
+   * saving new user to localStorage - called if there are all 
+   * data entered
    * 
    */
   function saveNewUser(user) {
+    // gets userId from last user
+    const lastUser = (getAllUsers().pop());
+    console.log(lastUser);
+    let newId = 0;
+    newUser.userId = (newId);
     newUser.firstName = user[0];
     newUser.lastName = user[1];
     newUser.email = user[2];
     newUser.password = user[3];
 
-//     todoUsersDB = getAllUsers().push(newUser);
-//     storage.setItem('P1_todoUsersDB', todoUsersDB);
-    goDashboard();
+    todoUsersDB = getAllUsers().push(newUser);
+    storage.setItem('P1_todoUsersDB', todoUsersDB);
+  }
+
+
+  /**
+   * load user data from global variable
+   * 
+   */
+  function loadSettings() {
+    
+    const user = getCurrentUser(currentUser);
+    document.getElementById('first2').value = newUser.firstName;
+    document.getElementById('last2').value = newUser.lastName;
+    document.getElementById('email3').value = newUser.email;
+    document.getElementById('pass3').value = newUser.password;
   }
 
 
@@ -305,8 +530,8 @@ document.getElementById('save_settings').addEventListener('click', function(even
     newUser.email = document.getElementById('email3').value;
     newUser.password = document.getElementById('pass3').value;
 
-//     todoUsersDB = getAllUsers().push(newUser);
-//     storage.setItem('P1_todoUsersDB', todoUsersDB);
+    todoUsersDB = getAllUsers().push(newUser);
+    storage.setItem('P1_todoUsersDB', todoUsersDB);
   }
 
 
@@ -314,75 +539,145 @@ document.getElementById('save_settings').addEventListener('click', function(even
    * function to create new TODO list
    * 
    */
-  function newTODO(user) {
+  function loadUserLists() {
     //
   }
 
-/*
-  Details:
- 
-Create a simple "to-do list" application, using client-side HTML, CSS, and Javascript only. This application should store its data using 
-localStorage only, and should not connect to any external APIs, backends, databases etc. This should function as a "Single Page Applicat
-ion", so the page should never actually refresh or reload, and no links should direct to any other page. Instead, when links are clicked 
-(or forms are submitted), the contents of the page should disappear and the new content should be loaded in its place, all without actua
-lly redirecting the user. Here are the user-stories:
+
+  /**
+   * function to create new TODO list
+   * 
+   */
+  function listInit(user) {
+    //
+  }
 
 
-Index
+  /**
+   * changes name of existing list
+   * 
+   */
+  function editListCaptions() {
+    
+    const defaultValue = document.getElementById
+      ('tableCaption');
+    const caption = window.prompt('list caption',
+      defaultValue.innerText.substring(0,defaultValue.
+      length-5).trim());
+    let same = false;
+    
+      for (const newCaption in listUserListsCaptions) {
+        
+          if (newCaption === caption) {
+              alert('You already have list with same name.');
+              same = true;
+              break;
+          }
+      }
+      
+      if (!same) {
+          defaultValue.innerText = caption;
+      }
+  }
 
-1. Upon a fresh load (or refresh) of the application, the user should see the title of the application, a description, and two buttons: 
-"Sign Up" and "Log In".
 
-2. If "Sign Up" is clicked, the user should be taken to a form where they need to enter their: first name, last name, email, and passwo
-rd (all strings, but passwords should not be displayed in plain text inputs, use password inputs instead). The user also needs to check 
-a check-box that says "I agree to the Terms of Use".  When they submit the form, if there are any errors on the form, they should see a 
-red error message somewhere on the screen. If the form submission is successful, they should be taken to their dashboard. All data for 
-the new user should be stored in localStorage. Note: in an actual application you would never store passwords this way, this is just for 
-the sake of this project.
+  /**
+   * adds new item to new list
+   * 
+   */
+  function addNewItem() {
+    
+    const item = window.prompt('What is your new task?','');
+    const count = document.getElementById('selectedListUl').
+      childElementCount;
+    const node = document.createElement("LI");
+    
+    const newItem = `
+        <label id="label${(count+1)}"><input type="checkbox" 
+          id="item${(count+1)}">${item}</label>`;
+    
+    node.innerHTML = newItem;
+    document.getElementById('selectedListUl').appendChild(node);
+  }
 
-3. If "Log In" is clicked the user should be taken to a form where they need to enter their email address and password. When they submit
- the form, if there are any errors on the form (or if the email and password don't match an existing user), they should see a red error 
- message somewhere on the screen. If the inputs are fine, and both of these match an existing user, then the user should be taken to the
- ir dashboard.
 
-Dashboard:
+  /**
+   * temporarily stores all lists in an array
+   * 
+   */
+  function getAllListsOfUser() {
+    
+    const allLists = storage.getItem('P1_todoUsersDB');
+    
+      for (const list of allLists) {
+          if (currentUser.userId === list.userId) {
+            userLists.push(list);
+          }
+      }
+      
+    // gets all list names and saves it to a global variable
+    listUserListsCaptions = getAllCaptionsons(userLists);
+      
+    return userLists;
+  }
 
-1. The dashboard should list (in chronological order), all of the "To-Do Lists" created by the user thus far. If none have been created, 
-none should be displayed. In either case, there should be a "Create New to-do List button" somewhere on the screen.
 
-2. If one of the existing todo-lists is clicked on, the user should be taken to that list.
+  /**
+   * fills an array with captions of TODO lists created
+   * by current user
+   * 
+   */
+  function getAllCaptionsons(lists) {
+    
+    for (const list of lists) {
+      listUserListsCaptions.push(list.listName);
+    }
+    
+    return listUserListsCaptions;
+  }
 
-3. If a user clicks to create a new todo list, they should be taken to a blank list.
 
-Lists:
+  /**
+   * b
+   * 
+   */
+  function a() {
+    //
+  }
 
-When a user is viewing a (new or existing) list, they should be able to :
 
-1. Name or rename the list to anything they want, as long as it doesn't conflict with the name of any other list created by that particu
-lar user.
+  /**
+   * cleaning global variables at logout
+   * 
+   */
+  function logoutPurge() {
+  
+  // purge of new User and current User values
+  newUser.userId = 0;       currentUser.userId = 0;
+  newUser.firstName = '';   currentUser.firstName = '';
+  newUser.lastName = '';    currentUser.lastName = '';
+  newUser.email = '';       currentUser.email = '';
+  newUser.password = '';    currentUser.password = '';
+  
+  // user list purge
+  userList.userId = 0;
+  userList.listId = 0;
+  userList.listName = '';
+  userList.items = [];
+  
+  // list item purge
+  listItem.value = '';
+  listItem.done = false;
 
-2.  Add as many items to the list as they wish
-
-3. Check off an item as "done", and uncheck it as well
-
-4. Save the list
-
-Users 
-
-1. If the user is logged in, then at the top of the screen, on every page of the site, there should be a "log out" button. Clicking that 
-should log the user out.
-
-2. If the user is logged in, then at the top of the screen, on every page of the site, there should be a button that says "account setti
-ngs". Clicking that link should take the user to a page where they can edit any/all of the information they entered on the signup for.
-
-3. Your application should support as many unique users as possible. The actions that one user takes within the application should have 
-virtually no effect on what other users are doing.
-
-Extra Credit:
-
-If you feel like getting fancy, try to find an open-source JS library for hashing passwords (using any hashing function you prefer). Has
-h the passwords when you receive them and only store the hash rather than the raw password.
-
-As mentioned above, storing actual users' passwords (in a real life application) is far more complex than this, and often involves many 
-moving parts, but it's still good practice to get used to using hashing libraries.
-*/
+  currentUser = newUser;
+  todoUsersDB = [], todoListDB = [];
+  userLists = [], currentListItems = [];
+  listUserListsCaptions = [];
+  }
+  
+  
+  
+// HELPER FUNCTIONS
+//
+  
+  //
