@@ -149,8 +149,13 @@
     }
   ];
   
-  window.localStorage.removeItem('P1_todoUsersDB');
-  window.localStorage.removeItem('P1_todoNotesDB');
+    if (window.localStorage.getItem('P1_todoUsersDB')) {
+        window.localStorage.removeItem('P1_todoUsersDB');
+    }
+    if (window.localStorage.getItem('P1_todoNotesDB')) {
+        window.localStorage.removeItem('P1_todoNotesDB');
+    }
+  
   window.localStorage.setItem(
     'P1_todoUsersDB', JSON.stringify(demoUsers));
   window.localStorage.setItem(
@@ -194,12 +199,21 @@ document.getElementById('login1').addEventListener('click', function(event){
 });
 document.getElementById('signup2').addEventListener('click', function(event){
   event.preventDefault();
-  signUpCheck();
+  const result = signUpCheck();
+  
+    if (result) {
+        loadUserLists();
+        goDashboard();
+    }
 });
 document.getElementById('login2').addEventListener('click', function(event){
   event.preventDefault();
-  logInCheck();
-    if (dashboard.className === 'show') { loadUserLists(); }
+  const result = logInCheck();
+  
+    if (result) {
+        loadUserLists();
+        goDashboard();
+    }
 });
 document.getElementById('logout1').addEventListener('click', function(event){
   event.preventDefault();
@@ -215,6 +229,7 @@ document.getElementById('userSettings').addEventListener('click', function(event
   event.preventDefault();
   goSettings();
   loadSettings();
+  elementPurge();
 });
 document.getElementById('createList').addEventListener('click', function(event){
   event.preventDefault();
@@ -223,18 +238,19 @@ document.getElementById('createList').addEventListener('click', function(event){
 document.getElementById('cancel').addEventListener('click', function(event){
   event.preventDefault();
   goDashboard();
-  //nacitaj listy
+  document.getElementById('settings').className = 'hide';
+  loadUserLists();
 });
 document.getElementById('saveSettings').addEventListener('click', function(event){
   event.preventDefault();
   goDashboard();
   saveSettings();
-  // nacitaj listy
+  loadUserLists();
 });
-document.getElementById('editListCaption').addEventListener('click', function(event){
-  event.preventDefault();
-  editListCaptions();
-});
+// document.getElementById('editListCaption').addEventListener('click', function(event){
+//   event.preventDefault();
+//   editListCaptions();
+// });
 document.getElementById('addItem').addEventListener('click', function(event){
   event.preventDefault();
   addNewItem();
@@ -256,15 +272,15 @@ document.getElementById('saveList').addEventListener('click', function(event){
   function goIndex() {
     toggleClasses('index');
     
-    if (signup.className === 'show') {
-        toggleClasses('signup');
-    }
-    if (login.className === 'show') {
-        toggleClasses('login');
-    }
-    if (dashboard.className === 'show') {
-        toggleClasses('dashboard');
-    }
+      if (signup.className === 'show') {
+          toggleClasses('signup');
+      }
+      if (login.className === 'show') {
+          toggleClasses('login');
+      }
+      if (dashboard.className === 'show') {
+          toggleClasses('dashboard');
+      }
   }
 
 
@@ -294,12 +310,12 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function goDashboard() {
     
-    if (signup.className === 'show') {
-        toggleClasses('signup');
-    }
-    if (login.className === 'show') {
-        toggleClasses('login');
-    }
+      if (signup.className === 'show') {
+          toggleClasses('signup');
+      }
+      if (login.className === 'show') {
+          toggleClasses('login');
+      }
     toggleClasses('dashboard');
   }
 
@@ -356,7 +372,12 @@ document.getElementById('saveList').addEventListener('click', function(event){
                         message.innerText = '';
                         let formData = [fName.value, lName.value, 
                                         email.value, pass.value];
-                        saveNewUser(formData);
+                        const exists = userExists(formData,'signup');
+                        
+                          if (exists) {
+                              saveNewUser(formData);
+                              return true;
+                          }
 
                     } else { message.innerText = 'Agree with terms of use'; }
                 } else { message.innerText = 'Fill up password'; }
@@ -380,8 +401,11 @@ document.getElementById('saveList').addEventListener('click', function(event){
 
       if ((email.value !== '')) {
           if ((pass.value !== '')) {
+            
               let formData = [email.value, pass.value];
-              userExists(formData);
+              const exists = userExists(formData, 'login');
+              
+                if (exists) { return true; }
 
           } else { message.innerText = 'Fill up password'; }
       } else { message.innerText = 'Fill up your email'; }
@@ -393,56 +417,88 @@ document.getElementById('saveList').addEventListener('click', function(event){
    * match some user
    * 
    */
-  function userExists(loggingUser) {
+  function userExists(loggingUser, type) {
 
     let allUsers = getAllUsers();
-    const message = document.getElementById('message2');
+    let isLogin = false, isSignup = false;
+    const message1 = document.getElementById('message1');
+    const message2 = document.getElementById('message2');
     
     if (allUsers !== null || undefined) {
     
       for (let i=0;i<allUsers.length;i++) {
         
-        if ((allUsers[i].email === loggingUser[0]) && 
-            (allUsers[i].password === loggingUser[1])) {
-          // saves data of current user to variable and returns it
-          const userId = allUsers[i].userId;
-          const userFirstName = allUsers[i].firstName;
-          const userLastName = allUsers[i].lastName;
-          const userEmail = allUsers[i].email;
-          const userPassword = allUsers[i].password;
-          const curUser = [userId, userFirstName, userLastName, 
-                            userEmail, userPassword];
-          getCurrentUser(curUser);
-          break;
-        } 
-          else {
-          
-          // search which data are faulty, if email or password
-          let mail = true, passw = true;
-          
-            for (let i=0;i<allUsers.length;i++) {
-                if ((allUsers[i].email !== loggingUser[0]) &&
-                    (allUsers[i].password === loggingUser[1])) {
-                    mail = false;
+        // checking data at login
+        if (type === 'login') {
+
+            if ((allUsers[i].email === loggingUser[0]) && 
+                (allUsers[i].password === loggingUser[1])) {
+                isLogin = true;
+            } else {
+        
+              // search which data are faulty, if email or 
+              // password
+              let mail = true, passw = true;
+        
+                for (let i=0;i<allUsers.length;i++) {
+                    if ((allUsers[i].email !== loggingUser[0]) &&
+                        (allUsers[i].password === loggingUser[1])) {
+                        mail = false;
+                    }
+                    if ((allUsers[i].email === loggingUser[0]) &&
+                        (allUsers[i].password !== loggingUser[1])) {
+                        passw = false;
+                    }
                 }
-                if ((allUsers[i].email === loggingUser[0]) &&
-                    (allUsers[i].password !== loggingUser[1])) {
-                    passw = false;
+
+                // write out which data are faulty
+                if (!mail) {
+                  message2.innerText = 'You entered wrong e-mail.';
                 }
+                  else if (!passw) {
+                    message2.innerText = 'You entered wrong password.';
+                  }
+                  else { message2.innerText = 'There is no such user. Enter correct data.'; }
+                
+                // clean up message
+                if (mail && passw) { message2.innerText = ''; }
+              }
+
+          //checkimg data at signup if match existing user
+          } else if (type === 'signup') {
+
+              if ((allUsers[i].firstName === loggingUser[0]) && 
+                  (allUsers[i].lastName === loggingUser[1]) &&
+                  (allUsers[i].email === loggingUser[2]) && 
+                  (allUsers[i].password === loggingUser[3])) {
+                  
+                  message1.innerText = 'User with entered data already exists.';
+                  return false;
+          } else {
+            isSignup = true;
+          }
             }
 
-            // write out which data are faulty
-            if (!mail) {
-              message.innerText = 'You entered wrong e-mail.';
-            }
-              else if (!passw) {
-                message.innerText = 'You entered wrong password.';
-              }
-              else { message.innerText = 'There is no such user. Enter correct data.'; }
+        if (isLogin) {
+            // saves data of current user to variable and returns it
+            const userId = allUsers[i].userId;
+            const userFirstName = allUsers[i].firstName;
+            const userLastName = allUsers[i].lastName;
+            const userEmail = allUsers[i].email;
+            const userPassword = allUsers[i].password;
+            const curUser = [userId, userFirstName, userLastName, 
+                              userEmail, userPassword];
             
-            // clean up message
-            if (mail && passw) { message.innerText = ''; }
+            setCurrentUser(curUser);
+            
+            return true;
         }
+          else if (isSignup) {
+
+            // if sign up verification passed
+            return true;
+          }
+
       }
     } else { alert('no users in localStorage.'); }
     
@@ -466,15 +522,23 @@ document.getElementById('saveList').addEventListener('click', function(event){
    * returns currentUser
    * 
    */
-  function getCurrentUser(user) {
+  function getCurrentUser() {
+    
+    return currentUser;
+  }
+
+
+  /**
+   * setup currentUser global variable
+   * 
+   */
+  function setCurrentUser(user) {
     
     currentUser.userId = user[0];
     currentUser.firstName = user[1];
     currentUser.lastName = user[2];
     currentUser.email = user[3];
     currentUser.password = user[4];
-
-    return currentUser;
   }
   
 
@@ -490,17 +554,17 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function saveNewUser(user) {
     // gets userId from last user
-    const lastUser = (getAllUsers().pop());
-    console.log(lastUser);
-    let newId = 0;
-    newUser.userId = (newId);
+    const allUsers = getAllUsers()
+    const newId = ++((allUsers.pop()).userId);
+    
+    newUser.userId = newId;
     newUser.firstName = user[0];
     newUser.lastName = user[1];
     newUser.email = user[2];
     newUser.password = user[3];
 
-    todoUsersDB = getAllUsers().push(newUser);
-    storage.setItem('P1_todoUsersDB', todoUsersDB);
+    allUsers.push(newUser);
+    storage.setItem('P1_todoUsersDB', JSON.stringify(allUsers));
   }
 
 
@@ -510,11 +574,11 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function loadSettings() {
     
-    const user = getCurrentUser(currentUser);
-    document.getElementById('first2').value = newUser.firstName;
-    document.getElementById('last2').value = newUser.lastName;
-    document.getElementById('email3').value = newUser.email;
-    document.getElementById('pass3').value = newUser.password;
+    const curUser = getCurrentUser();
+    document.getElementById('first2').value = curUser.firstName;
+    document.getElementById('last2').value = curUser.lastName;
+    document.getElementById('email3').value = curUser.email;
+    document.getElementById('pass3').value = curUser.password;
   }
 
 
@@ -524,14 +588,17 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function saveSettings() {
     
-    const user = getCurrentUser(currentUser);
-    newUser.firstName = document.getElementById('first2').value;
-    newUser.lastName = document.getElementById('last2').value;
-    newUser.email = document.getElementById('email3').value;
-    newUser.password = document.getElementById('pass3').value;
+    const curUser = getCurrentUser();
+    
+    curUser.firstName = document.getElementById('first2').value;
+    curUser.lastName = document.getElementById('last2').value;
+    curUser.email = document.getElementById('email3').value;
+    curUser.password = document.getElementById('pass3').value;
+    
+    let index = --(newUser.userId);
+    const allUsers = getAllUsers().splice(index, 1, newUser);
 
-    todoUsersDB = getAllUsers().push(newUser);
-    storage.setItem('P1_todoUsersDB', todoUsersDB);
+    storage.setItem('P1_todoUsersDB', JSON.stringify(allUsers));
   }
 
 
@@ -541,6 +608,119 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function loadUserLists() {
     //
+    const userDiv = document.getElementById('username');
+    const user = getCurrentUser();
+    const allTodoLists = JSON.parse( storage.getItem('P1_todoNotesDB') );
+    let userJSONTodoLists = [], userTodoLists = [];
+    let currentList = [], currentItems = [];
+    
+      // 1. gets all lists and search for lists created by current user
+      for (let i=0; i<allTodoLists.length;i++) {
+        
+        if (allTodoLists[i].userId === user.userId) {
+          userJSONTodoLists.push(allTodoLists[i]);
+        }
+      }
+      console.log(userJSONTodoLists);
+      // 2. process JSONs into regullar aray
+      if (userJSONTodoLists.length > 0) {
+      
+        // if user has todo lists
+        for (let i=0; i<userJSONTodoLists.length;i++) {
+          
+          // loading JSON data into array - id, name
+          currentList[0] = userJSONTodoLists[i].listId;
+          currentList[1] = userJSONTodoLists[i].listName;
+          
+            for (let j=0; j<userJSONTodoLists[i].items.length;j++) {
+              // loading each record into array
+              let currentRecord = [];
+              const value = userJSONTodoLists[i].items[j].value;
+              const done = userJSONTodoLists[i].items[j].done;
+              
+              currentRecord.push(value);
+              currentRecord.push(done);
+              
+              currentItems.push(currentRecord);
+            }
+            // and save them in an array
+            currentItems = [];
+              
+          // add current list to lists array (non-JSON format)
+          userTodoLists.push(currentList);
+          currentList = [];
+        }
+        
+        // assign to global variable
+        userLists = userTodoLists;
+        
+        // generate links to each list
+        generateLinks(userLists);
+      }
+      else {
+        document.getElementById('listOfListsDiv').innerText = 
+          'No lists were created yet. Create a new one by pressing a button above.';
+      }
+    userDiv.innerText = `${user.firstName} ${user.lastName}'s dashboard`;
+  }
+
+
+  /**
+   * function generate links for each TODO list
+   * 
+   */
+  function generateLinks(lists) {
+    
+    const node = document.createElement('SPAN');
+    let newItem = '';
+    
+      for (let i=0; i<lists.length; i++) {
+        const listName = lists[i][1];
+        newItem += `
+          <a href="javascript: " id="${(lists[i][0])}"
+           onClick="openList(this.id)">${listName}</a>`;
+        
+        node.innerHTML = newItem;
+        document.getElementById('listOfListsSpan').appendChild(node);
+      }
+  }
+
+
+  /**
+   * function to create new TODO list
+   * 
+   */
+  function openList(id) {
+    
+    const captionTd = document.getElementById('tableCaption');
+    const selectedListDiv = document.getElementById('selectedListDiv');
+    captionTd.innerHTML = '';
+    
+      for (let i=0; i<userLists.length; i++) {
+        
+        // finds record of list matching id
+        if (userLists[i][0] == id) {
+          
+          const node = document.createElement('SPAN');
+          const currentList = userLists[i];
+          
+          const newItem = `${currentList[1]}
+          <button id="editListCaption">edit</button>`;
+                  
+          node.innerHTML = newItem;
+          captionTd.appendChild(node);
+          selectedListDiv.className = 'show';
+          
+          break;
+        }
+      }
+    
+    // assign event to button
+    document.getElementById('editListCaption').addEventListener(
+      'click', function(event){
+        event.preventDefault();
+        editListCaptions();
+    });
   }
 
 
@@ -561,9 +741,9 @@ document.getElementById('saveList').addEventListener('click', function(event){
     
     const defaultValue = document.getElementById
       ('tableCaption');
-    const caption = window.prompt('list caption',
-      defaultValue.innerText.substring(0,defaultValue.
-      length-5).trim());
+    const caption = window.prompt('enter list caption:',
+      defaultValue.innerText.substring(
+        0,defaultValue.innerText.length-5).trim() );
     let same = false;
     
       for (const newCaption in listUserListsCaptions) {
@@ -629,9 +809,9 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function getAllCaptionsons(lists) {
     
-    for (const list of lists) {
-      listUserListsCaptions.push(list.listName);
-    }
+      for (const list of lists) {
+        listUserListsCaptions.push(list.listName);
+      }
     
     return listUserListsCaptions;
   }
@@ -641,8 +821,39 @@ document.getElementById('saveList').addEventListener('click', function(event){
    * b
    * 
    */
+  function saveList() {
+    //
+  }
+
+
+  /**
+   * a
+   * 
+   */
   function a() {
     //
+  }
+
+
+  /**
+   * cleaning content of Elements and removing dynamically
+   * created nodes
+   * 
+   */
+  function elementPurge() {
+
+    const listCaption = document.getElementById('listOfListsSpan');
+    const listElement = document.getElementById('selectedListUl');
+    const dashboardCaption = document.getElementById('username');
+    const tableCaption = document.getElementById('tableCaption');
+    
+      if (dashboardCaption) { dashboardCaption.innerText = 'Dashboard'; }
+      if (tableCaption) { tableCaption.innerText = 'listName'; }
+      
+      if (listCaption) {
+          listCaption.removeChild( listCaption.childNodes[0] ); }
+      if (listElement) {
+          listElement.removeChild( listElement.childNodes[0] ); }
   }
 
 
@@ -652,27 +863,30 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function logoutPurge() {
   
-  // purge of new User and current User values
-  newUser.userId = 0;       currentUser.userId = 0;
-  newUser.firstName = '';   currentUser.firstName = '';
-  newUser.lastName = '';    currentUser.lastName = '';
-  newUser.email = '';       currentUser.email = '';
-  newUser.password = '';    currentUser.password = '';
+    // purge of new User and current User values
+    newUser.userId = 0;       currentUser.userId = 0;
+    newUser.firstName = '';   currentUser.firstName = '';
+    newUser.lastName = '';    currentUser.lastName = '';
+    newUser.email = '';       currentUser.email = '';
+    newUser.password = '';    currentUser.password = '';
+    
+    // user list purge
+    userList.userId = 0;
+    userList.listId = 0;
+    userList.listName = '';
+    userList.items = [];
+    
+    // list item purge
+    listItem.value = '';
+    listItem.done = false;
   
-  // user list purge
-  userList.userId = 0;
-  userList.listId = 0;
-  userList.listName = '';
-  userList.items = [];
-  
-  // list item purge
-  listItem.value = '';
-  listItem.done = false;
-
-  currentUser = newUser;
-  todoUsersDB = [], todoListDB = [];
-  userLists = [], currentListItems = [];
-  listUserListsCaptions = [];
+    currentUser = newUser;
+    todoUsersDB = [], todoListDB = [];
+    userLists = [], currentListItems = [];
+    listUserListsCaptions = [];
+    
+    // clean up dynamically entered data
+    elementPurge();
   }
   
   

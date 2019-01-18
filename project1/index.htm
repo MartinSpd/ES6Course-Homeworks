@@ -32,11 +32,11 @@
       <span>Create an account.</span>
       <br /><br />
       <form id="form2">
-        <input type="text" id="first"/><br />
-        <input type="text" id="last"/><br />
-        <input type="text" id="email1"/><br />
-        <input type="password" id="pass1"/><br /><br />
-        <label class="terms"><input type="checkbox" id="terms"/>
+        <input type="text" id="first" value="Bob"/><br />
+        <input type="text" id="last" value="Doe"/><br />
+        <input type="text" id="email1" value="bob-doe@example.com"/><br />
+        <input type="password" id="pass1" value="666"/><br /><br />
+        <label class="terms"><input type="checkbox" id="terms" checked/>
           I agree to the Terms of Use</label>
         <br /><br /><br />
         <button id="signup2">Sign Up</button>
@@ -50,8 +50,8 @@
       <h2>Log In</h2>
       <span>Log in to see your TODO lists.</span><br />
       <form id="form3">
-        <input type="text" id="email2"/><br />
-        <input type="password" id="pass2"/>
+        <input type="text" id="email2" value="john.doe@example.com"/><br />
+        <input type="password" id="pass2" value="123" />
         <br /><br /><br />
         <button id="login2">Log In</button>
       </form>
@@ -61,39 +61,39 @@
     
     <!-- DASHBOARD AFTER LOGIN OR SIGNUP -->
     <div id="dashboard" class="hide">
-     <h2>Dashboard</h2>
-        <form id="form4">
-          <!-- buttons: settings, create new, log out -->
-          <button id="userSettings">
-            Account Settings</button>
-          <button id="createList">
-            New TODO list</button>
-          <button id="logout1">Log Out</button>
+     <h2 id="username">Dashboard</h2>
+      <form id="form4">
+        <!-- buttons: settings, create new, log out -->
+        <button id="userSettings">
+          Account Settings</button>
+        <button id="createList">
+          New TODO list</button>
+        <button id="logout1">Log Out</button>
       </form>
-      <br /><br /><br />
+      <br /><br />
       
       <!-- div where user lists write out -->
       <div id="listsDiv" class="show">
         <h3>recently created lists</h3>
           <!-- links to lists -->
-          <div id="listOfLists">
-            <a href="" id="">ListName</a>,
+          <div id="listOfListsDiv">
+            <span id="listOfListsSpan"></span>
             <!-- current (selected) list -->
-            <div id="selectedListDiv">
+            <div id="selectedListDiv" class="hide">
               <br /><br />
               
               <form id="selectedListForm">
                 <table id="listTable">
                   <tr>
                     <td id="tableCaption">
-                      ListName
-                      <button id="editListCaption">edit</button>
+                    <!--ListName-->
+                      <!--button id="editListCaption">edit</button-->
                     </td>
                   </tr>
                   <tr>
                     <td id="selectedListItems">
                       <ul class="list" id="selectedListUl">
-                        <li>
+                        <!--li>
                           <label id="label1"><input type="checkbox"
                             id="item1">label1</label>
                         </li>
@@ -104,7 +104,7 @@
                         <li>
                           <label id="label3"><input type="checkbox" 
                             id="item3">label3</label>
-                        </li>
+                        </li-->
                       </ul>
                     </td>
                   </tr>
