@@ -1,5 +1,5 @@
 {
-  "name": "ES6-course-project-1",
+  "name": "project-1",
   "version": "0.0.0",
   "description": "Simple single site application using localStorage for TODO list management",
   "main": "index.htm",
