@@ -8,7 +8,7 @@
       <TITLE>Project #1: TODO List</TITLE>
       <style type="text/css" src="styles.css">
       </style>
-      <script language="Javascript" src="project1.js" ></script>
+      <script language="Javascript" src="project1.js"></script>
   </HEAD>
   <BODY>
 
@@ -77,48 +77,35 @@
         <h3>recently created lists</h3>
           <!-- links to lists -->
           <div id="listOfListsDiv">
-            <span id="listOfListsSpan"></span>
-            <!-- current (selected) list -->
-            <div id="selectedListDiv" class="hide">
-              <br /><br />
-              
-              <form id="selectedListForm">
-                <table id="listTable">
-                  <tr>
-                    <td id="tableCaption">
-                    <!--ListName-->
-                      <!--button id="editListCaption">edit</button-->
-                    </td>
-                  </tr>
-                  <tr>
-                    <td id="selectedListItems">
-                      <ul class="list" id="selectedListUl">
-                        <!--li>
-                          <label id="label1"><input type="checkbox"
-                            id="item1">label1</label>
-                        </li>
-                        <li>
-                          <label id="label2"><input type="checkbox" 
-                            id="item2">label2</label>
-                        </li>
-                        <li>
-                          <label id="label3"><input type="checkbox" 
-                            id="item3">label3</label>
-                        </li-->
-                      </ul>
-                    </td>
-                  </tr>
-                </table>
-                <br />
-                <button id="addItem">
-                  + Item to List</button>
-                <button id="saveList">
-                  Save List</button>
-              </form>
-              
-            </div>
-          </div>
+            <div id="listOfListsSpan"></div>
+          </div><br />
       </div>
+
+      <!-- current (selected) list -->
+      <div id="selectedListDiv" class="show">
+        <br /><br />
+        
+        <form id="selectedListForm">
+          <table id="listTable">
+            <tr>
+              <td id="tableCaption">
+                <!-- caption and edit button goes here -->
+              </td>
+            </tr>
+            <tr>
+              <td id="selectedListItems">
+                <ol class="list" id="selectedListOl">
+                  <!-- list generates here -->
+                </ol>
+              </td>
+            </tr>
+          </table>
+          <br />
+          <button id="addItem">+ Item to List</button>
+          <button id="saveList">Save List</button>
+        </form>
+      </div>
+            
     </div>
     
     

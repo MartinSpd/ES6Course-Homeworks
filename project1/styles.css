@@ -23,13 +23,17 @@ h2 { font: bold 14pt Tahoma; }
  
 .hide { display: none; }
 
+.invisible { visibility: hidden; }
+
 .list {
   left: -30px;
-  list-style-type: none;
+  list-style-type: decimal;
   position: relative;
 }
 
 .show { display: block; }
+
+.visible { visibility: visible; }
 
 .terms { font: normal 8pt Tahoma; }
 
@@ -39,7 +43,7 @@ h2 { font: bold 14pt Tahoma; }
  * IDs:
  */
 
- #createList, #saveList, #saveSettings { font-weight: bold; }
+#createList, #saveList, #saveSettings { font-weight: bold; }
  
 #editListCaption {
   position: relative;
@@ -47,7 +51,7 @@ h2 { font: bold 14pt Tahoma; }
 }
 
 #listTable, td {
-  border: 1px solid black;
+  border: 0px solid black;
   border-spacing: 0;
   width: auto;
 }
@@ -67,3 +71,4 @@ h2 { font: bold 14pt Tahoma; }
   font: bold 10pt Tahoma;
   text-decoration: underline;
 }
+
