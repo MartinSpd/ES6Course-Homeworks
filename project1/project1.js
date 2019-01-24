@@ -1,5 +1,7 @@
 'use strict';
 
+// import SHA1 from 'CryptoJS';
+
 // //////////////////////////////////////
 // DEMO DATA - USERS
   const demoUsers = [
@@ -182,7 +184,18 @@
   const index = document.getElementById('index');
   const signup = document.getElementById('signup');
   const login = document.getElementById('login');
+  
   const dashboard = document.getElementById('dashboard');
+  const dashboardCaption = document.getElementById('username');
+  
+  const listsDiv = document.getElementById('listsDiv');
+  const listOfListsDiv = document.getElementById('listOfListsDiv');
+  const listOfListsSpan = document.getElementById('listOfListsSpan');
+  const selectedListDiv = document.getElementById('selectedListDiv');
+  
+  const tableCaption = document.getElementById('tableCaption');
+  const selectedListOl = document.getElementById('selectedListOl');
+  
   const settings = document.getElementById('settings');
 
 
@@ -199,7 +212,9 @@ document.getElementById('login1').addEventListener('click', function(event){
 document.getElementById('signup2').addEventListener('click', function(event){
   event.preventDefault();
   const result = signUpCheck();
-  
+//   console.log('206: signup - dashboard.className = ', dashboard.className);
+// console.log('207: signup -listsDiv.className = ', listsDiv.className);
+// console.log('208: signup - selectedListDiv.className = ', selectedListDiv.className);
     if (result) {
         goDashboard();
         loadUserLists();
@@ -208,7 +223,9 @@ document.getElementById('signup2').addEventListener('click', function(event){
 document.getElementById('login2').addEventListener('click', function(event){
   event.preventDefault();
   const result = logInCheck();
-  
+//   console.log('217: login - dashboard.className = ', dashboard.className);
+// console.log('218: login - listsDiv.className = ', listsDiv.className);
+// console.log('219: login - selectedListDiv.className = ', selectedListDiv.className);
     if (result) {
         goDashboard();
         loadUserLists();
@@ -218,13 +235,17 @@ document.getElementById('logout1').addEventListener('click', function(event){
   event.preventDefault();
   goIndex();
   logoutPurge();
-  elementPurge();
+//   console.log('230: logout1 - dashboard.className = ', dashboard.className);
+// console.log('231: logout1 - listsDiv.className = ', listsDiv.className);
+// console.log('232: logout1 - selectedListDiv.className = ', selectedListDiv.className);
 });
 document.getElementById('logout2').addEventListener('click', function(event){
   event.preventDefault();
   goIndex();
   logoutPurge();
-  elementPurge();
+//   console.log('239: logout2 - dashboard.className = ', dashboard.className);
+// console.log('240: logout2 - listsDiv.className = ', listsDiv.className);
+// console.log('241: logout2 - selectedListDiv.className = ', selectedListDiv.className);
 });
 document.getElementById('userSettings').addEventListener('click', function(event){
   event.preventDefault();
@@ -245,6 +266,8 @@ document.getElementById('saveSettings').addEventListener('click', function(event
   goDashboard();
   document.getElementById('settings').className = 'hide';
   saveSettings();
+  document.getElementById('listOfListsSpan').innerHTML = '';
+  loadUserLists();
 });
 document.getElementById('addItem').addEventListener('click', function(event){
   event.preventDefault();
@@ -253,6 +276,8 @@ document.getElementById('addItem').addEventListener('click', function(event){
 document.getElementById('saveList').addEventListener('click', function(event){
   event.preventDefault();
   saveList();
+  document.getElementById('listOfListsSpan').innerHTML = '';
+  loadUserLists();
 });
 
 
@@ -305,8 +330,6 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function goDashboard() {
     
-    const listsDiv = document.getElementById('listsDiv');
-    const selectedListDiv = document.getElementById('selectedListDiv');
     
       if (signup.className === 'show') {
           toggleClasses('signup');
@@ -316,6 +339,13 @@ document.getElementById('saveList').addEventListener('click', function(event){
       }
       
     toggleClasses('dashboard');
+    
+      if (listsDiv.className === 'hide') {
+          toggleClasses('listsDiv');
+      }
+      if (selectedListDiv.className === 'hide') {
+          toggleClasses('selectedListDiv');
+      }
   }
 
 
@@ -370,8 +400,9 @@ document.getElementById('saveList').addEventListener('click', function(event){
                     if ((terms.checked)) {
 
                         message.innerText = '';
-                        let formData = [fName.value, lName.value, 
+                        let formData = [null, fName.value, lName.value, 
                                         email.value, pass.value];
+                                        // CryptoJS.SHA1(pass.value)];
                         const exists = userExists(formData,'signup');
                         
                           if (exists) {
@@ -403,6 +434,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
           if ((pass.value !== '')) {
             
               let formData = [email.value, pass.value];
+              // let formData = [email.value, CryptoJS.SHA1(pass.value)];
               const exists = userExists(formData, 'login');
               
                 if (exists) { return true; }
@@ -591,16 +623,20 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function saveNewUser(user) {
     // gets userId from last user
-    const allUsers = getAllUsers()
-    const newId = ++((allUsers.pop()).userId);
+    const allUsers = JSON.parse(storage.getItem('P1_todoUsersDB'));
+    user[0] = ++(allUsers.length);
     
-    newUser.userId = newId;
-    newUser.firstName = user[0];
-    newUser.lastName = user[1];
-    newUser.email = user[2];
-    newUser.password = user[3];
-
-    allUsers.push(newUser);
+    newUser.userId = user[0];
+    newUser.firstName = user[1];
+    newUser.lastName = user[2];
+    newUser.email = user[3];
+    newUser.password = user[4];
+    
+      if (allUsers[(allUsers.length-1)] == null) {
+          allUsers[(allUsers.length-1)] = newUser;
+      } else { allUsers.push(newUser); }
+      
+    setCurrentUser(user);
     storage.setItem('P1_todoUsersDB', JSON.stringify(allUsers));
   }
 
@@ -628,14 +664,14 @@ document.getElementById('saveList').addEventListener('click', function(event){
     const curUser = getCurrentUser();
     const editedUser = curUser;
     
-    curUser.firstName = document.getElementById('first2').value;
-    curUser.lastName = document.getElementById('last2').value;
-    curUser.email = document.getElementById('email3').value;
-    curUser.password = document.getElementById('pass3').value;
+    editedUser.firstName = document.getElementById('first2').value;
+    editedUser.lastName = document.getElementById('last2').value;
+    editedUser.email = document.getElementById('email3').value;
+    editedUser.password = document.getElementById('pass3').value;
     
-    const index = newUser.userId;
-    const allUsers = getAllUsers();
-    allUsers[(index-1)] = editedUser;
+    const index = (editedUser.userId-1);
+    let allUsers = getAllUsers();
+    allUsers[index] = editedUser;
     storage.setItem('P1_todoUsersDB', JSON.stringify(allUsers));
   }
 
@@ -649,7 +685,6 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function loadUserLists() {
     //
-    const userDiv = document.getElementById('username');
     const user = getCurrentUser();
     const allTodoLists = JSON.parse( storage.getItem('P1_todoNotesDB') );
     let userJSONTodoLists = [], userTodoLists = [];
@@ -703,10 +738,11 @@ document.getElementById('saveList').addEventListener('click', function(event){
         generateLinks(userLists);
       }
       else {
-        document.getElementById('listOfListsDiv').innerText = 
+        listOfListsDiv.innerText = 
           'No lists were created yet. Create a new one by pressing a button above.';
       }
-    userDiv.innerText = `${user.firstName} ${user.lastName}'s dashboard`;
+    dashboardCaption.innerText = 
+      `${user.firstName} ${user.lastName}'s dashboard`;
   }
 
 
@@ -719,19 +755,23 @@ document.getElementById('saveList').addEventListener('click', function(event){
   function generateLinks(lists) {
     
     const node = document.createElement('DIV');
+    node.setAttribute('id','innerDiv');
+    node.setAttribute('class','show');
     let newItem = '';
     
-    try {
+    listOfListsSpan.innerHTML = '';
+    
       for (let i=0; i<lists.length; i++) {
         const listName = lists[i][1];
         newItem += `
           <a href="javascript: " id="${(lists[i][0])}"
            onClick="openList(this.id)">${listName}</a>`;
         
-        node.innerHTML = newItem;
-        document.getElementById('listOfListsSpan').appendChild(node);
       }
-    } catch (err) { console.log(err); }
+      
+    node.innerHTML = newItem;
+    listOfListsSpan.innerHTML = newItem;
+    // listOfListsSpan.appendChild(node);
   }
   
   
@@ -741,10 +781,9 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function generateListItems(items, id) {
     
-    const selectedTasks = document.getElementById('selectedListOl');
     let newItem = '', checked = '';
     
-    selectedTasks.innerHTML = '';
+    selectedListOl.innerHTML = '';
     
       for (let i=0; i<items.length; i++) {
         
@@ -757,7 +796,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
             id="item${(i+1)}"${checked}/>${items[i][0]}</label>`;
         
         node.innerHTML = newItem;
-        selectedTasks.appendChild(node);
+        selectedListOl.appendChild(node);
       }
   }
 
@@ -769,10 +808,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function openList(id) {
     
-    const captionTd = document.getElementById('tableCaption');
-    const listsDiv = document.getElementById('listsDiv');
-    const selectedListDiv = document.getElementById('selectedListDiv');
-    captionTd.innerHTML = '';listsDiv.className = 'show';
+    tableCaption.innerHTML = '';
     
       for (let i=0; i<userLists.length; i++) {
         
@@ -786,7 +822,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
           <button id="editListCaption">edit</button>`;
                   
           node.innerHTML = newItem;
-          captionTd.appendChild(node);
+          tableCaption.appendChild(node);
           selectedListDiv.className = 'show';
           
           // 2. generate list of tasks
@@ -814,31 +850,20 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function listInit() {
     
-    const captionTd = document.getElementById('tableCaption');
-    const selectedListDiv = document.getElementById('selectedListDiv');
-    const selectedListOl = document.getElementById('selectedListOl');    
     const node = document.createElement('DIV');
 
-    try {
-      selectedListDiv.className = 'show';
-      try {
-        captionTd.innerText = '';
+    const newItem = `new TODO list
+    <button id="editListCaption">edit</button>`;
         
-        captionTd.innerHTML = '';
-        selectedListOl.innerHTML = ''; } catch (err) {}
-  
-      const newItem = `new TODO list
-      <button id="editListCaption">edit</button>`;
-          
-      node.innerHTML = newItem;
-      captionTd.appendChild(node);
-      
-      // assign event to button
-      document.getElementById('editListCaption').addEventListener('click', function(event){
-          event.preventDefault();
-          editListCaptions();
-      });
-    } catch (err) { console.log(err); }
+    node.innerHTML = newItem;
+    tableCaption.appendChild(node);
+    
+    // assign event to button
+    document.getElementById('editListCaption').addEventListener(
+      'click', function(event) {
+        event.preventDefault();
+        editListCaptions();
+    });
   }
 
 
@@ -848,11 +873,9 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function editListCaptions() {
     
-    const captionTd = document.getElementById
-      ('tableCaption');
     const node = document.createElement('DIV');
-    const defaultValue = captionTd.innerText.substring(
-      0,captionTd.innerText.length-5).trim();
+    const defaultValue = tableCaption.innerText.substring(
+      0,tableCaption.innerText.length-5).trim();
     let caption = window.prompt('enter list caption:',
           defaultValue);
     
@@ -868,12 +891,12 @@ document.getElementById('saveList').addEventListener('click', function(event){
           }
       }
           
-    captionTd.innerHTML = '';
+    tableCaption.innerHTML = '';
     const newItem = `${caption}
       <button id="editListCaption">edit</button>`;
             
     node.innerHTML = newItem;
-    captionTd.appendChild(node);
+    tableCaption.appendChild(node);
     
     // assign event to button
     document.getElementById('editListCaption').addEventListener(
@@ -891,8 +914,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
   function addNewItem() {
     
     const item = window.prompt('What is your new task?','');
-    const count = document.getElementById('selectedListOl').
-      childElementCount;
+    const count = selectedListOl.childElementCount;
     const node = document.createElement("LI");
     
     let newItem;
@@ -903,8 +925,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
                 id="item${(count+1)}">${item}</label>`;
                 
           node.innerHTML = newItem;
-          document.getElementById('selectedListOl').
-            appendChild(node);
+          selectedListOl.appendChild(node);
       }
     
   }
@@ -936,19 +957,20 @@ document.getElementById('saveList').addEventListener('click', function(event){
    */
   function saveList() {
     
-    const captionTd = document.getElementById('tableCaption');
     const userId = getCurrentUser().userId;
     const list = getUserList();
     const savingList = list;
-    const savingListName = captionTd.innerText.substring(
-                            0,captionTd.innerText.length-5).trim();
-    let savingListId = 0, isNew = false, allNotes = getAllNotes();
+    const savingListName = tableCaption.innerText.substring(
+                            0,tableCaption.innerText.length-5).trim();
+    let allNotes = JSON.parse(storage.getItem('P1_todoNotesDB')), 
+      savingListId = 0, isNew = false;
     
       // if it's an existing list - keeps an ID otherwise
       // a new ID is created
-      if (list.listId !== null) { savingListId = list.listId; }
-        else {
-          savingListId = ++(getAllNotes().pop().listId);
+      if (list.listId > 0) { 
+        savingListId = list.listId;
+      } else {
+          savingListId = ++(allNotes.length);
           isNew = true;
         }
         
@@ -959,13 +981,16 @@ document.getElementById('saveList').addEventListener('click', function(event){
     savingList.items = listItemsToJSON();
     
       // adds new or edited notes into notes database
-      if (isNew) { allNotes.push(savingList); }
-        else {
+      if (isNew) {
+        allNotes[(allNotes.length-1)] = savingList;
+      } else {
           let index = --(savingList.listId);
-          allNotes = getAllNotes().splice(index, 1, savingList);
+          //allNotes = getAllNotes().splice(index, 1, savingList);
+          allNotes[index] = savingList;
         }
     
     storage.setItem('P1_todoNotesDB', JSON.stringify(allNotes));
+    todoListDB = allNotes;
   }
 
 
@@ -975,9 +1000,8 @@ document.getElementById('saveList').addEventListener('click', function(event){
    * 
    */
   function listItemsToJSON() {
-    //
-    const currentListOl = document.getElementById('selectedListOl');
-    const currentListLi = currentListOl.getElementsByTagName('LI');
+    
+    const currentListLi = selectedListOl.getElementsByTagName('LI');
     currentListItems = [];
     
       if (currentListLi.length>0) {
@@ -988,14 +1012,11 @@ document.getElementById('saveList').addEventListener('click', function(event){
             
             const currentListLabel = currentListLi[i].
               getElementsByTagName('LABEL')[0];
-            const checked = currentListLabel.
-              innerHTML.indexOf('checked');
+            const checked = currentListLabel
+              .getElementsByTagName('INPUT')[0].checked;
               
             listItem.value = currentListLabel.innerText;
-            
-              if (checked !== -1) {
-                listItem.done = true;
-              } else { listItem.done = false; }
+            listItem.done = checked;
             currentListItems.push(listItem);
           }
         
@@ -1018,33 +1039,9 @@ document.getElementById('saveList').addEventListener('click', function(event){
 
 
   /**
-   * cleaning content of elements and removing dynamically
+   * cleaning global variables at logout & cleaning of
+   * element's content and removing their dynamically
    * created nodes
-   * 
-   */
-  function elementPurge() {
-
-    const listCaption = document.getElementById('listOfListsSpan');
-    const dashboardCaption = document.getElementById('username');
-    const listsDiv = document.getElementById('listsDiv');
-    const selectedListDiv = document.getElementById('selectedListDiv');
-    
-      if (dashboardCaption) { dashboardCaption.innerText = 'Dashboard'; }
-      
-      if (listCaption !== null) {
-          listCaption.innerHTML = '';
-      }
-      if (listsDiv !== null) {
-          listsDiv.className = 'show';
-      }
-      if (selectedListDiv !== null) {
-          selectedListDiv.className = 'hide';
-      }
-  }
-
-
-  /**
-   * cleaning global variables at logout
    * 
    */
   function logoutPurge() {
@@ -1070,6 +1067,20 @@ document.getElementById('saveList').addEventListener('click', function(event){
     todoUsersDB = [], todoListDB = [];
     userLists = [], currentListItems = [];
     listUserListsCaptions = [];
+    
+    // elemet's purge
+    dashboardCaption.innerText = 'Dashboard';
+    listsDiv.className = 'show';
+    listOfListsDiv.innerText = '';
+    listOfListsDiv.innerHTML = '';
+    
+    listOfListsSpan.innerText = '';
+    listOfListsSpan.innerHTML = '';
+    selectedListDiv.className = 'show';
+    tableCaption.innerText = '';
+    
+    tableCaption.innerHTML = '';
+    selectedListOl.innerHTML = '';
   }
   
   
