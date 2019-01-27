@@ -2,7 +2,8 @@
 
 // import SHA1 from 'CryptoJS';
 
-// //////////////////////////////////////
+
+
 // DEMO DATA - USERS
   const demoUsers = [
     { 
@@ -164,10 +165,12 @@
     'P1_todoNotesDB', JSON.stringify(demoNotes));
   
 
+
   /*
       Project #1
 
   */
+
 
   // global JSON variables - user and todo list
   const newUser = { userId: 0, firstName: '', lastName: '', email: '', password: '' };
@@ -177,8 +180,8 @@
   let currentUser = newUser;
   let todoUsersDB = [], todoListDB = [];
   let userLists = [], currentListItems = [];
-  let listUserListsCaptions = [];
-  let storage = window.localStorage;
+  let listOfUserListsCaptions = [];
+  let storage = window.localStorage, edited = false;
 
   // global variables for functions showing and hiding DIVs
   const index = document.getElementById('index');
@@ -190,13 +193,15 @@
   
   const listsDiv = document.getElementById('listsDiv');
   const listOfListsDiv = document.getElementById('listOfListsDiv');
-  const listOfListsSpan = document.getElementById('listOfListsSpan');
+  const listOfListsInnerDiv = document.getElementById('listOfListsInnerDiv');
   const selectedListDiv = document.getElementById('selectedListDiv');
   
   const tableCaption = document.getElementById('tableCaption');
+  const selectedListForm = document.getElementById('selectedListForm');
   const selectedListOl = document.getElementById('selectedListOl');
   
   const settings = document.getElementById('settings');
+
 
 
 // prevents default behaviour - redirecting from form after 
@@ -212,40 +217,30 @@ document.getElementById('login1').addEventListener('click', function(event){
 document.getElementById('signup2').addEventListener('click', function(event){
   event.preventDefault();
   const result = signUpCheck();
-//   console.log('206: signup - dashboard.className = ', dashboard.className);
-// console.log('207: signup -listsDiv.className = ', listsDiv.className);
-// console.log('208: signup - selectedListDiv.className = ', selectedListDiv.className);
-    if (result) {
+  
+  if (result) {
+        helper_loadUserLists();
         goDashboard();
-        loadUserLists();
     }
 });
 document.getElementById('login2').addEventListener('click', function(event){
   event.preventDefault();
   const result = logInCheck();
-//   console.log('217: login - dashboard.className = ', dashboard.className);
-// console.log('218: login - listsDiv.className = ', listsDiv.className);
-// console.log('219: login - selectedListDiv.className = ', selectedListDiv.className);
-    if (result) {
+  
+  if (result) {
+        helper_loadUserLists();
         goDashboard();
-        loadUserLists();
     }
 });
 document.getElementById('logout1').addEventListener('click', function(event){
   event.preventDefault();
   goIndex();
   logoutPurge();
-//   console.log('230: logout1 - dashboard.className = ', dashboard.className);
-// console.log('231: logout1 - listsDiv.className = ', listsDiv.className);
-// console.log('232: logout1 - selectedListDiv.className = ', selectedListDiv.className);
 });
 document.getElementById('logout2').addEventListener('click', function(event){
   event.preventDefault();
   goIndex();
   logoutPurge();
-//   console.log('239: logout2 - dashboard.className = ', dashboard.className);
-// console.log('240: logout2 - listsDiv.className = ', listsDiv.className);
-// console.log('241: logout2 - selectedListDiv.className = ', selectedListDiv.className);
 });
 document.getElementById('userSettings').addEventListener('click', function(event){
   event.preventDefault();
@@ -266,8 +261,8 @@ document.getElementById('saveSettings').addEventListener('click', function(event
   goDashboard();
   document.getElementById('settings').className = 'hide';
   saveSettings();
-  document.getElementById('listOfListsSpan').innerHTML = '';
-  loadUserLists();
+  document.getElementById('listOfListsInnerDiv').innerHTML = '';
+  helper_loadUserLists();
 });
 document.getElementById('addItem').addEventListener('click', function(event){
   event.preventDefault();
@@ -276,8 +271,9 @@ document.getElementById('addItem').addEventListener('click', function(event){
 document.getElementById('saveList').addEventListener('click', function(event){
   event.preventDefault();
   saveList();
-  document.getElementById('listOfListsSpan').innerHTML = '';
-  loadUserLists();
+  document.getElementById('listOfListsInnerDiv').innerHTML = '';
+  document.getElementById('saveList').disabled = true;
+  helper_loadUserLists();
 });
 
 
@@ -339,13 +335,6 @@ document.getElementById('saveList').addEventListener('click', function(event){
       }
       
     toggleClasses('dashboard');
-    
-      if (listsDiv.className === 'hide') {
-          toggleClasses('listsDiv');
-      }
-      if (selectedListDiv.className === 'hide') {
-          toggleClasses('selectedListDiv');
-      }
   }
 
 
@@ -402,8 +391,8 @@ document.getElementById('saveList').addEventListener('click', function(event){
                         message.innerText = '';
                         let formData = [null, fName.value, lName.value, 
                                         email.value, pass.value];
-                                        // CryptoJS.SHA1(pass.value)];
-                        const exists = userExists(formData,'signup');
+                                // email.value, CryptoJS.SHA1(pass.value)];
+                        const exists = helper_userExists(formData,'signup');
                         
                           if (exists) {
                               saveNewUser(formData);
@@ -435,12 +424,412 @@ document.getElementById('saveList').addEventListener('click', function(event){
             
               let formData = [email.value, pass.value];
               // let formData = [email.value, CryptoJS.SHA1(pass.value)];
-              const exists = userExists(formData, 'login');
+              const exists = helper_userExists(formData, 'login');
               
                 if (exists) { return true; }
 
           } else { message.innerText = 'Fill up password'; }
       } else { message.innerText = 'Fill up your email'; }
+  }
+  
+
+
+// SAVING NEW DATA - USER, LIST, SETTINGS
+//
+
+
+  /**
+   * saving new user to localStorage - called if 
+   * verification of entered data was succeessful
+   * 
+   */
+  function saveNewUser(user) {
+    // gets userId from last user
+    const allUsers = getAllUsers();
+    user[0] = ++(allUsers.length);
+    
+    newUser.userId = user[0];
+    newUser.firstName = user[1];
+    newUser.lastName = user[2];
+    newUser.email = user[3];
+    newUser.password = user[4];
+    
+      if (allUsers[(allUsers.length-1)] == null) {
+          allUsers[(allUsers.length-1)] = newUser;
+      } else { allUsers.push(newUser); }
+      
+    setCurrentUser(user);
+    setAllUsers(allUsers);
+  }
+
+
+  /**
+   * load user data from global variable
+   * 
+   */
+  function loadSettings() {
+    
+    const curUser = getCurrentUser();
+    document.getElementById('first2').value = curUser.firstName;
+    document.getElementById('last2').value = curUser.lastName;
+    document.getElementById('email3').value = curUser.email;
+    document.getElementById('pass3').value = curUser.password;
+  }
+
+
+  /**
+   * saving user data to localStorage
+   * 
+   */
+  function saveSettings() {
+    
+    const curUser = getCurrentUser();
+    const editedUser = curUser;
+    
+    editedUser.firstName = document.getElementById('first2').value;
+    editedUser.lastName = document.getElementById('last2').value;
+    editedUser.email = document.getElementById('email3').value;
+    editedUser.password = document.getElementById('pass3').value;
+    
+    const index = (editedUser.userId-1);
+    let allUsers = getAllUsers();
+    allUsers[index] = editedUser;
+    setAllUsers(allUsers);
+  }
+
+
+  /**
+   * called after clicking a link with list name - 
+   * creates TODO list
+   * 
+   */
+  function openList(id) {
+    
+    tableCaption.innerHTML = '';
+    selectedListForm.className = 'visible';
+    
+      for (let i=0; i<userLists.length; i++) {
+        
+        // finds record of list matching id
+        if (userLists[i][0] == id) {
+          
+          // 1. write out caption
+          const node = document.createElement('DIV');
+          const currentList = userLists[i];
+          const newItem = `${currentList[1]}
+          <button id="editListCaption">edit</button>`;
+                  
+          node.innerHTML = newItem;
+          tableCaption.appendChild(node);
+          selectedListDiv.className = 'show';
+          
+          // 2. generate list of tasks
+          helper_generateListItems(currentList[2]);
+          
+          // 3. saves current list to global variable
+          setUserList(id, currentList);
+          break;
+        }
+      }
+    
+    // assign event to button
+    document.getElementById('editListCaption').addEventListener('click', function(event){
+        event.preventDefault();
+        editListCaptions();
+    });
+    
+    document.getElementById('saveList').disabled = true;
+  }
+
+
+  /**
+   * function to create new TODO list - loads default 
+   * values, when user want to create new list, not
+   * edit existing notes
+   * 
+   */
+  function listInit() {
+    
+    const node = document.createElement('DIV');
+    
+    selectedListForm.className = 'visible';
+    tableCaption.innerHTML = '';
+    selectedListOl.innerHTML = '';
+
+    const newItem = `new TODO list
+    <button id="editListCaption">edit</button>`;
+        
+    node.innerHTML = newItem;
+    tableCaption.appendChild(node);
+    
+    // assign event to button
+    document.getElementById('editListCaption').addEventListener(
+      'click', function(event) {
+        event.preventDefault();
+        editListCaptions();
+    });
+  }
+
+
+  /**
+   * changes name of existing list
+   * 
+   */
+  function editListCaptions() {
+    
+    const node = document.createElement('DIV');
+    const defaultValue = tableCaption.innerText.substring(
+      0,tableCaption.innerText.length-5).trim();
+    let caption = window.prompt('enter list caption:',
+          defaultValue);
+    
+      // in case cancel was pressed
+      if (caption === null) { return ; }
+    
+      // else check if caption does not exists
+      for (let i=0;i<listOfUserListsCaptions.length;i++) {
+          
+          if (listOfUserListsCaptions[i] === caption) {
+              alert('You already have list with same name.');
+              return ;
+          }
+      }
+          
+    tableCaption.innerHTML = '';
+    const newItem = `${caption}
+      <button id="editListCaption">edit</button>`;
+            
+    node.innerHTML = newItem;
+    tableCaption.appendChild(node);
+    
+    // assign event to button
+    document.getElementById('editListCaption').addEventListener(
+      'click', function(event){
+        event.preventDefault();
+        editListCaptions();
+    });
+
+    // mark caption edited
+    edited = true;
+    document.getElementById('saveList').disabled = false;
+  }
+
+
+  /**
+   * adds new item to new list
+   * 
+   */
+  function addNewItem() {
+    
+    const item = window.prompt('What is your new task?','');
+    const count = selectedListOl.childElementCount;
+    const node = document.createElement("LI");
+    
+    let newItem;
+    
+      if (item) {
+          newItem = `
+              <label id="label${(count+1)}"><input type="checkbox" 
+                id="item${(count+1)}">${item}</label>`;
+                
+          node.innerHTML = newItem;
+          selectedListOl.appendChild(node);
+
+          // list updated
+          edited = true;
+          document.getElementById('saveList').disabled = false;
+      }
+    
+  }
+
+
+  /**
+   * function gets data from list and save it to JSON and
+   * localStorage
+   * 
+   */
+  function saveList() {
+    
+    const userId = getCurrentUser().userId;
+    const list = getUserList();
+    const savingList = list;
+    const savingListName = tableCaption.innerText.substring(
+                            0,tableCaption.innerText.length-5).trim();
+    let allNotes = getAllNotes(), 
+      savingListId = 0, isNew = false;
+
+    // checks if checkbox was clicked
+    helper_checkboxClicked();
+    
+      if (edited) {
+
+          // if it's an existing list - keeps an ID otherwise
+          // a new ID is created
+          if (list.listId > 0) { 
+              savingListId = list.listId;
+          } else {
+              savingListId = ++(allNotes.length);
+              isNew = true;
+              }
+              
+          // set values of userId, listId, listName and tasks
+          savingList.userId = userId;
+          savingList.listId = savingListId;
+          savingList.listName = savingListName;
+          savingList.items = helper_listItemsToJSON();
+          
+          // adds new or edited notes into notes database
+          if (isNew) {
+              allNotes[(allNotes.length-1)] = savingList;
+          } else {
+              let index = --(savingList.listId);
+              allNotes[index] = savingList;
+              }
+    
+        setAllNotes(allNotes);
+        todoListDB = getAllNotes();
+      }
+      edited = false;
+  }
+
+
+  /**
+   * cleaning global variables at logout & cleaning of
+   * element's content and removing their dynamically
+   * created nodes
+   * 
+   */
+  function logoutPurge() {
+  
+    // purge of new User and current User values
+    newUser.userId = 0;       currentUser.userId = 0;
+    newUser.firstName = '';   currentUser.firstName = '';
+    newUser.lastName = '';    currentUser.lastName = '';
+    newUser.email = '';       currentUser.email = '';
+    newUser.password = '';    currentUser.password = '';
+    
+    // user list purge
+    userList.userId = 0;
+    userList.listId = 0;
+    userList.listName = '';
+    userList.items = [];
+    
+    // list item purge
+    listItem.value = '';
+    listItem.done = false;
+  
+    currentUser = newUser;
+    todoUsersDB = [], todoListDB = [];
+    userLists = [], currentListItems = [];
+    listOfUserListsCaptions = [];
+    
+    // elemet's purge
+    dashboardCaption.innerText = 'Dashboard';
+    listsDiv.className = 'show';
+    selectedListDiv.className = 'show';
+    selectedListForm.className = 'invisible';
+    
+    if (listOfListsInnerDiv.hasChildNodes()) {
+      listOfListsInnerDiv.removeChild(
+        listOfListsInnerDiv.getElementsByTagName('DIV')[0]);
+    }
+  }
+  
+  
+  
+// HELPER FUNCTIONS
+//
+
+
+    /**
+   * gets list of users from localStorage - used to save new 
+   * user or to login
+   * 
+   */
+  function getAllUsers() {
+    let todoUsersDB = storage.getItem('P1_todoUsersDB');
+
+      if (todoUsersDB) { return JSON.parse(todoUsersDB); }
+        else { return []; }
+  }
+
+
+  /**
+   * sets list of users to localStorage
+   * 
+   */
+  function setAllUsers(users) {
+    storage.setItem('P1_todoUsersDB', JSON.stringify(users));
+  }
+
+
+  /**
+   * gets list of todo lists from localStorage - used to save
+   * new todo list
+   * 
+   */
+  function getAllNotes() {
+    let todoNotesDB = storage.getItem('P1_todoNotesDB');
+
+      if (todoNotesDB) { return JSON.parse(todoNotesDB); }
+        else { return []; }
+  }
+
+
+  /**
+   * sets list of todo lists from localStorage
+   * 
+   */
+  function setAllNotes(lists) {
+    storage.setItem('P1_todoNotesDB', JSON.stringify(lists));
+  }
+
+
+  /**
+   * returns currentUser - a global variable
+   * 
+   */
+  function getCurrentUser() {
+    
+    return currentUser;
+  }
+
+
+  /**
+   * setup currentUser - a global variable
+   * 
+   */
+  function setCurrentUser(user) {
+    
+    currentUser.userId = user[0];
+    currentUser.firstName = user[1];
+    currentUser.lastName = user[2];
+    currentUser.email = user[3];
+    currentUser.password = user[4];
+  }
+
+
+  /**
+   * returns userList - currently selected notes
+   * 
+   */
+  function getUserList() {
+    
+    return userList;
+  }
+
+
+  /**
+   * setup currentList - a global variable for 
+   * currently selected notes
+   * 
+   */
+  function setUserList(id, list) {
+    
+    userList.userId = getCurrentUser().userId;
+    userList.listId = list[0];
+    userList.listName = list[1];
+    userList.items = list[2];
   }
 
 
@@ -449,7 +838,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
    * match some user - helper for login and signup
    * 
    */
-  function userExists(loggingUser, type) {
+  function helper_userExists(loggingUser, type) {
 
     let allUsers = getAllUsers();
     let isLogin = false, isSignup = false;
@@ -538,166 +927,32 @@ document.getElementById('saveList').addEventListener('click', function(event){
 
 
   /**
-   * gets list of users from localStorage - used to save new 
-   * user or to login
-   * 
-   */
-  function getAllUsers() {
-    let todoUsersDB = storage.getItem('P1_todoUsersDB');
-
-      if (todoUsersDB) { return JSON.parse(todoUsersDB); }
-        else { return []; }
-  }
-
-
-  /**
-   * gets list of todo lists from localStorage - used to save
-   * new todo list
-   * 
-   */
-  function getAllNotes() {
-    let todoNotesDB = storage.getItem('P1_todoNotesDB');
-
-      if (todoNotesDB) { return JSON.parse(todoNotesDB); }
-        else { return []; }
-  }
-
-
-  /**
-   * returns currentUser - a global variable
-   * 
-   */
-  function getCurrentUser() {
-    
-    return currentUser;
-  }
-
-
-  /**
-   * setup currentUser - a global variable
-   * 
-   */
-  function setCurrentUser(user) {
-    
-    currentUser.userId = user[0];
-    currentUser.firstName = user[1];
-    currentUser.lastName = user[2];
-    currentUser.email = user[3];
-    currentUser.password = user[4];
-  }
-
-
-  /**
-   * returns userList - currently selected notes
-   * 
-   */
-  function getUserList() {
-    
-    return userList;
-  }
-
-
-  /**
-   * setup currentList - a global variable for 
-   * currently selected notes
-   * 
-   */
-  function setUserList(id, list) {
-    
-    userList.userId = getCurrentUser().userId;
-    userList.listId = list[0];
-    userList.listName = list[1];
-    userList.items = list[2];
-  }
-  
-
-
-// SAVING NEW DATA - USER, LIST, SETTINGS
-//
-
-
-  /**
-   * saving new user to localStorage - called if 
-   * verification of entered data was succeessful
-   * 
-   */
-  function saveNewUser(user) {
-    // gets userId from last user
-    const allUsers = JSON.parse(storage.getItem('P1_todoUsersDB'));
-    user[0] = ++(allUsers.length);
-    
-    newUser.userId = user[0];
-    newUser.firstName = user[1];
-    newUser.lastName = user[2];
-    newUser.email = user[3];
-    newUser.password = user[4];
-    
-      if (allUsers[(allUsers.length-1)] == null) {
-          allUsers[(allUsers.length-1)] = newUser;
-      } else { allUsers.push(newUser); }
-      
-    setCurrentUser(user);
-    storage.setItem('P1_todoUsersDB', JSON.stringify(allUsers));
-  }
-
-
-  /**
-   * load user data from global variable
-   * 
-   */
-  function loadSettings() {
-    
-    const curUser = getCurrentUser();
-    document.getElementById('first2').value = curUser.firstName;
-    document.getElementById('last2').value = curUser.lastName;
-    document.getElementById('email3').value = curUser.email;
-    document.getElementById('pass3').value = curUser.password;
-  }
-
-
-  /**
-   * saving user data to localStorage
-   * 
-   */
-  function saveSettings() {
-    
-    const curUser = getCurrentUser();
-    const editedUser = curUser;
-    
-    editedUser.firstName = document.getElementById('first2').value;
-    editedUser.lastName = document.getElementById('last2').value;
-    editedUser.email = document.getElementById('email3').value;
-    editedUser.password = document.getElementById('pass3').value;
-    
-    const index = (editedUser.userId-1);
-    let allUsers = getAllUsers();
-    allUsers[index] = editedUser;
-    storage.setItem('P1_todoUsersDB', JSON.stringify(allUsers));
-  }
-
-
-  /**
    * function gets TODO lists for logged user by filtering
    * all lists, JSON is then read and data saved into arrays
    * of same structure, which is assigned to global variable
    * calls function to generate link for each list
    * 
    */
-  function loadUserLists() {
+  function helper_loadUserLists() {
     //
     const user = getCurrentUser();
     const allTodoLists = JSON.parse( storage.getItem('P1_todoNotesDB') );
     let userJSONTodoLists = [], userTodoLists = [];
-    let currentList = [], currentItems = [];
+    let currentList = [], currentItems = [], index = 0;
     
-    listUserListsCaptions = [];
+    listOfUserListsCaptions = [];
     
       // 1. gets all lists and search for lists created by current user
       for (let i=0; i<allTodoLists.length;i++) {
         
-        if (allTodoLists[i].userId === user.userId) {
-          userJSONTodoLists.push(allTodoLists[i]);
-        }
+        if (allTodoLists[i] !== null) {
+          if (allTodoLists[i].userId === user.userId) {
+            userJSONTodoLists.push(allTodoLists[i]);
+          }
+        } else if (allTodoLists[i] === null) {
+            
+            index = i;
+          }
       }
       
       // 2. process JSONs into regullar aray
@@ -710,7 +965,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
           currentList[0] = userJSONTodoLists[i].listId;
           currentList[1] = userJSONTodoLists[i].listName;
           // saving list caption to global array
-          listUserListsCaptions[i] = userJSONTodoLists[i].listName;
+          listOfUserListsCaptions[i] = userJSONTodoLists[i].listName;
           
             for (let j=0; j<userJSONTodoLists[i].items.length;j++) {
               // loading each record into array
@@ -735,11 +990,13 @@ document.getElementById('saveList').addEventListener('click', function(event){
         userLists = userTodoLists;
         
         // generate links to each list
-        generateLinks(userLists);
+        helper_generateLinks(userLists);
       }
-      else {
-        listOfListsDiv.innerText = 
-          'No lists were created yet. Create a new one by pressing a button above.';
+      else {console.log('977: ');
+        listOfListsInnerDiv.innerHTML = `<div>
+          No lists were created yet. Create a new one by pressing 
+          a button above.
+          </div>`;
       }
     dashboardCaption.innerText = 
       `${user.firstName} ${user.lastName}'s dashboard`;
@@ -749,29 +1006,24 @@ document.getElementById('saveList').addEventListener('click', function(event){
   /**
    * function generates links for each TODO list
    * at login - lists created by user in the past
-   * line 726 use to make problems
    * 
    */
-  function generateLinks(lists) {
+  function helper_generateLinks(lists) {
     
     const node = document.createElement('DIV');
-    node.setAttribute('id','innerDiv');
-    node.setAttribute('class','show');
     let newItem = '';
     
-    listOfListsSpan.innerHTML = '';
+    listOfListsInnerDiv.innerHTML = '';
     
       for (let i=0; i<lists.length; i++) {
         const listName = lists[i][1];
         newItem += `
           <a href="javascript: " id="${(lists[i][0])}"
            onClick="openList(this.id)">${listName}</a>`;
-        
       }
       
     node.innerHTML = newItem;
-    listOfListsSpan.innerHTML = newItem;
-    // listOfListsSpan.appendChild(node);
+    listOfListsInnerDiv.appendChild(node);
   }
   
   
@@ -779,7 +1031,7 @@ document.getElementById('saveList').addEventListener('click', function(event){
    * function generates list of tasks for clicked list
    * 
    */
-  function generateListItems(items, id) {
+  function helper_generateListItems(items) {
     
     let newItem = '', checked = '';
     
@@ -793,141 +1045,33 @@ document.getElementById('saveList').addEventListener('click', function(event){
           
         newItem = `
           <label id="label${(i+1)}"><input type="checkbox"
-            id="item${(i+1)}"${checked}/>${items[i][0]}</label>`;
+            class="chkbox" id="item${(i+1)}"${checked}/>
+            ${items[i][0]}</label>`;
+        let id = `item${(i+1)}`;
         
         node.innerHTML = newItem;
         selectedListOl.appendChild(node);
       }
-  }
-
-
-  /**
-   * called after clicking a link with list name - 
-   * creates TODO list
-   * 
-   */
-  function openList(id) {
     
-    tableCaption.innerHTML = '';
-    
-      for (let i=0; i<userLists.length; i++) {
-        
-        // finds record of list matching id
-        if (userLists[i][0] == id) {
-          
-          // 1. write out caption
-          const node = document.createElement('DIV');
-          const currentList = userLists[i];
-          const newItem = `${currentList[1]}
-          <button id="editListCaption">edit</button>`;
-                  
-          node.innerHTML = newItem;
-          tableCaption.appendChild(node);
-          selectedListDiv.className = 'show';
-          
-          // 2. generate list of tasks
-          generateListItems(currentList[2], id);
-          
-          // 3. saves current list to global variable
-          setUserList(id, currentList);
-          break;
-        }
+    // gets all checkboxes from items
+    let chkboxes = selectedListOl.getElementsByClassName('chkbox');
+      
+      // assign event listener to checkbox
+      for (let i=0;i<chkboxes.length;i++) {
+        chkboxes[i].addEventListener('click', 
+          helper_checkboxClicked, false);
       }
-    
-    // assign event to button
-    document.getElementById('editListCaption').addEventListener('click', function(event){
-        event.preventDefault();
-        editListCaptions();
-    });
   }
 
 
   /**
-   * function to create new TODO list - loads default 
-   * values, when user want to create new list, not
-   * edit existing notes
+   * marks if checkbox was clicked
    * 
    */
-  function listInit() {
-    
-    const node = document.createElement('DIV');
-
-    const newItem = `new TODO list
-    <button id="editListCaption">edit</button>`;
-        
-    node.innerHTML = newItem;
-    tableCaption.appendChild(node);
-    
-    // assign event to button
-    document.getElementById('editListCaption').addEventListener(
-      'click', function(event) {
-        event.preventDefault();
-        editListCaptions();
-    });
-  }
-
-
-  /**
-   * changes name of existing list
-   * 
-   */
-  function editListCaptions() {
-    
-    const node = document.createElement('DIV');
-    const defaultValue = tableCaption.innerText.substring(
-      0,tableCaption.innerText.length-5).trim();
-    let caption = window.prompt('enter list caption:',
-          defaultValue);
-    
-      // in case cancel was pressed
-      if (caption === null) { return ; }
-    
-      // else check if caption does not exists
-      for (let i=0;i<listUserListsCaptions.length;i++) {
-          
-          if (listUserListsCaptions[i] === caption) {
-              alert('You already have list with same name.');
-              return ;
-          }
-      }
-          
-    tableCaption.innerHTML = '';
-    const newItem = `${caption}
-      <button id="editListCaption">edit</button>`;
-            
-    node.innerHTML = newItem;
-    tableCaption.appendChild(node);
-    
-    // assign event to button
-    document.getElementById('editListCaption').addEventListener(
-      'click', function(event){
-        event.preventDefault();
-        editListCaptions();
-    });
-  }
-
-
-  /**
-   * adds new item to new list
-   * 
-   */
-  function addNewItem() {
-    
-    const item = window.prompt('What is your new task?','');
-    const count = selectedListOl.childElementCount;
-    const node = document.createElement("LI");
-    
-    let newItem;
-    
-      if (item) {
-          newItem = `
-              <label id="label${(count+1)}"><input type="checkbox" 
-                id="item${(count+1)}">${item}</label>`;
-                
-          node.innerHTML = newItem;
-          selectedListOl.appendChild(node);
-      }
-    
+  function helper_checkboxClicked() {
+    edited = true;
+    document.getElementById('saveList').disabled = false;
+    return edited;
   }
 
 
@@ -951,55 +1095,11 @@ document.getElementById('saveList').addEventListener('click', function(event){
 
 
   /**
-   * function gets data from list and save it to JSON and
-   * localStorage
-   * 
-   */
-  function saveList() {
-    
-    const userId = getCurrentUser().userId;
-    const list = getUserList();
-    const savingList = list;
-    const savingListName = tableCaption.innerText.substring(
-                            0,tableCaption.innerText.length-5).trim();
-    let allNotes = JSON.parse(storage.getItem('P1_todoNotesDB')), 
-      savingListId = 0, isNew = false;
-    
-      // if it's an existing list - keeps an ID otherwise
-      // a new ID is created
-      if (list.listId > 0) { 
-        savingListId = list.listId;
-      } else {
-          savingListId = ++(allNotes.length);
-          isNew = true;
-        }
-        
-    // set values of userId, listId, listName and tasks
-    savingList.userId = userId;
-    savingList.listId = savingListId;
-    savingList.listName = savingListName;
-    savingList.items = listItemsToJSON();
-    
-      // adds new or edited notes into notes database
-      if (isNew) {
-        allNotes[(allNotes.length-1)] = savingList;
-      } else {
-          let index = --(savingList.listId);
-          //allNotes = getAllNotes().splice(index, 1, savingList);
-          allNotes[index] = savingList;
-        }
-    
-    storage.setItem('P1_todoNotesDB', JSON.stringify(allNotes));
-    todoListDB = allNotes;
-  }
-
-
-  /**
    * reads all list items and push them all to a JSON array,
    * used at saving edited / new list
    * 
    */
-  function listItemsToJSON() {
+  function helper_listItemsToJSON() {
     
     const currentListLi = selectedListOl.getElementsByTagName('LI');
     currentListItems = [];
@@ -1029,63 +1129,4 @@ document.getElementById('saveList').addEventListener('click', function(event){
   }
 
 
-  /**
-   * a
-   * 
-   */
-  function a() {
-    //
-  }
-
-
-  /**
-   * cleaning global variables at logout & cleaning of
-   * element's content and removing their dynamically
-   * created nodes
-   * 
-   */
-  function logoutPurge() {
   
-    // purge of new User and current User values
-    newUser.userId = 0;       currentUser.userId = 0;
-    newUser.firstName = '';   currentUser.firstName = '';
-    newUser.lastName = '';    currentUser.lastName = '';
-    newUser.email = '';       currentUser.email = '';
-    newUser.password = '';    currentUser.password = '';
-    
-    // user list purge
-    userList.userId = 0;
-    userList.listId = 0;
-    userList.listName = '';
-    userList.items = [];
-    
-    // list item purge
-    listItem.value = '';
-    listItem.done = false;
-  
-    currentUser = newUser;
-    todoUsersDB = [], todoListDB = [];
-    userLists = [], currentListItems = [];
-    listUserListsCaptions = [];
-    
-    // elemet's purge
-    dashboardCaption.innerText = 'Dashboard';
-    listsDiv.className = 'show';
-    listOfListsDiv.innerText = '';
-    listOfListsDiv.innerHTML = '';
-    
-    listOfListsSpan.innerText = '';
-    listOfListsSpan.innerHTML = '';
-    selectedListDiv.className = 'show';
-    tableCaption.innerText = '';
-    
-    tableCaption.innerHTML = '';
-    selectedListOl.innerHTML = '';
-  }
-  
-  
-  
-// HELPER FUNCTIONS
-//
-  
-  //

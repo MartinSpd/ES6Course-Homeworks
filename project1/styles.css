@@ -4,13 +4,13 @@
  */
 
  body {
-    font: normal 10pt Tahoma;
-    color: black;
+  font: normal 10pt Tahoma;
+  color: black;
 }
 
 h1 {
-    font: bold 16pt Tahoma;
-    color: darkred;
+  font: bold 16pt Tahoma;
+  color: darkred;
 }
 
 h2 { font: bold 14pt Tahoma; }
@@ -18,8 +18,8 @@ h2 { font: bold 14pt Tahoma; }
 h3 { font: bold 12pt Tahoma; }
 
 li {
-  position: relative;
-  left: 20px;
+position: relative;
+left: 20px;
 }
 
 
@@ -27,43 +27,49 @@ li {
 
 
 /*
- * Classes:
- */
- 
+* Classes:
+*/
+
 .hide { display: none; }
 
+.chkbox { font: normal 10pt Tahoma; }
+
+.invisible { visibility: hidden; }
+
 .list {
-  left: -30px;
-  list-style-type: decimal;
-  position: relative;
+left: -30px;
+list-style-type: decimal;
+position: relative;
 }
 
 .show { display: block; }
 
 .terms { font: normal 8pt Tahoma; }
 
+.visibile { visibility: visible; }
+
 
 
 /*
- * IDs:
- */
+* IDs:
+*/
 
 #createList, #saveList, #saveSettings { font-weight: bold; }
- 
+
 #editListCaption {
-  position: relative;
-  right: -50px;
+position: relative;
+right: -50px;
 }
 
 #listTable, td {
-  border: 0px solid black;
-  border-spacing: 0;
-  width: auto;
+border: 0px solid black;
+border-spacing: 0;
+width: auto;
 }
 
 #logout1, #logout2 {
-    float: right;
-    position: relative;
+  float: right;
+  position: relative;
 }
 
 #logout1 { top: -30px; }
@@ -73,7 +79,8 @@ li {
 #message1, #message2 { color: red; }
 
 #tableCaption {
-  font: bold 10pt Tahoma;
-  text-decoration: underline;
+font: bold 10pt Tahoma;
+text-decoration: underline;
 }
+
 
