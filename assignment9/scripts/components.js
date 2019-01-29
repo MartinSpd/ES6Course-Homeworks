@@ -35,7 +35,7 @@ let pass3 = '';
 
 const renderIndexDiv = () => {
   
-  return  `
+  return `
     <!-- DEFAULT DIV: INDEX -->
     <div id="index">
     <h1>TODO List</h1>

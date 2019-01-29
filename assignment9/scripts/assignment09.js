@@ -14,6 +14,7 @@
   const newUser = { userId: 0, firstName: '', lastName: '', email: '', password: '' };
   const userList = { userId: 0, listId: 0, listName: '', items: [] };
   const listItem = { value: '', done: false };
+  const body = document.getElementsByTagName('BODY')[0];
 
   // other global variables
   let currentUser = newUser;
@@ -21,26 +22,6 @@
   let userLists = [], currentListItems = [];
   let listOfUserListsCaptions = [];
   let storage = window.localStorage, edited = false;
-
-  // global variables for functions showing and hiding DIVs
-  const body = document.getElementsByTagName('BODY')[0];
-  // const index = document.getElementById('index');
-  // const signup = document.getElementById('signup');
-  // const login = document.getElementById('login');
-  
-  // const dashboard = document.getElementById('dashboard');
-  // const dashboardCaptionHTML = document.getElementById('username');
-  
-  // const listsDiv = document.getElementById('listsDiv');
-  // const listOfListsDiv = document.getElementById('listOfListsDiv');
-  // const listOfListsInnerDiv = document.getElementById('listOfListsInnerDiv');
-  // const selectedListDiv = document.getElementById('selectedListDiv');
-  
-  // const tableCaption = document.getElementById('tableCaption');
-  // const selectedListForm = document.getElementById('selectedListForm');
-  // const selectedListOl = document.getElementById('selectedListOl');
-  
-  // const settings = document.getElementById('settings');
 
 
 
@@ -93,12 +74,12 @@ body.onload = () => goIndex();
           });
           break;          // DASHBOARD
         case 'logout1' :
-          document.addEventListener('click', (e) => {
-        
-            if ((e.target) && (e.target.id === thisID)) {
-                e.preventDefault(); goIndex();
-                logoutPurge();
-            }
+          document.addEventListener('click', (event) => {
+              if ((event.target) && (event.target.id 
+                   === thisID)) {
+                  event.preventDefault(); goIndex();
+                  logoutPurge();
+              }
           });
           break;
         case 'userSettings' :
@@ -119,17 +100,21 @@ body.onload = () => goIndex();
           });
           break;
         case 'addItem' :
-          document.getElementById(thisID).
-            addEventListener('click', (event) => {
-              event.preventDefault(); addNewItem();
+          document.addEventListener('click', (e) => {
+            
+            if ((e.target) && (e.target.id === thisID)) {
+                e.preventDefault(); addNewItem();
+            }
           });
 
           break;
         case 'saveList' :
-          document.getElementById(thisID).
-            addEventListener('click', (event) => {
-              event.preventDefault(); saveList();
-              helper_loadUserLists();
+          document.addEventListener('click', (event) => {
+            
+            if ((event.target) && (event.target.id === thisID)) {
+                event.preventDefault(); saveList();
+                helper_loadUserLists();
+            }
           });
           break;         // SETTINGS
         case 'logout2' :
@@ -148,14 +133,12 @@ body.onload = () => goIndex();
         case 'saveSettings' :
           document.getElementById(thisID).
             addEventListener('click', (event) => {
-              event.preventDefault(); goDashboard();
-              saveSettings();
+              event.preventDefault(); saveSettings();
+              goDashboard();
               helper_loadUserLists();
           });
           break;
       }
-
-
    }
 
 
@@ -267,7 +250,7 @@ body.onload = () => goIndex();
                 if ((pass.value !== '')) {
                     if ((terms.checked)) {
 
-                        message.innerText = '';
+                        message1 = '';
                         let formData = [null, fName.value, lName.value, 
                                         email.value, pass.value];
                                 // email.value, CryptoJS.SHA1(pass.value)];
@@ -303,11 +286,11 @@ body.onload = () => goIndex();
 
     const email = document.getElementById('email2');
     const pass = document.getElementById('pass2');
-    const message2 = document.getElementById('message2');
 
       if ((email.value !== '')) {
           if ((pass.value !== '')) {
             
+              message2 = '';
               let formData = [email.value, pass.value];
               // let formData = [email.value, CryptoJS.SHA1(pass.value)];
               const exists = helper_userExists(formData, 'login');
@@ -378,7 +361,7 @@ body.onload = () => goIndex();
     
     const curUser = getCurrentUser();
     const editedUser = curUser;
-    console.log('700: ', document.getElementById('first2').value);
+    
     editedUser.firstName = document.getElementById('first2').value;
     editedUser.lastName = document.getElementById('last2').value;
     editedUser.email = document.getElementById('email3').value;
@@ -473,7 +456,6 @@ body.onload = () => goIndex();
    */
   function editListCaptions() {
     
-    // const node = document.createElement('DIV');
     const defaultValue = tableCaption.innerText.substring(
       0,tableCaption.innerText.length-5).trim();
     let caption = window.prompt('enter list caption:',
@@ -494,15 +476,12 @@ body.onload = () => goIndex();
     notesCaption = `${caption}
       <button id="editListCaption">edit</button>`;
             
-    // node.innerHTML = newItem;
-    // tableCaption.appendChild(node);
-    console.log('873');
+    reRenderDashboard();
     
     // assign event to button
-    document.getElementById('editListCaption').addEventListener(
-      'click', (event) => {
-        event.preventDefault();
-        editListCaptions();
+    document.getElementById('editListCaption').
+      addEventListener('click', (event) => {
+        event.preventDefault(); editListCaptions();
     });
 
     // mark caption edited
@@ -518,18 +497,16 @@ body.onload = () => goIndex();
   function addNewItem() {
     
     const item = window.prompt('What is your new task?','');
-    const count = selectedListOl.childElementCount;
-    // const node = document.createElement("LI");
+    const count = document.getElementById('selectedListOl').
+      getElementsByTagName('LI').length;
     
     // let newItem;
     
       if (item) {
           notesItems += `
-              <label id="label${(count+1)}"><input type="checkbox" 
-                id="item${(count+1)}">${item}</label>`;
+            <LI><label id="label${(count+1)}"><input type="checkbox" 
+                id="item${(count+1)}">${item}</label></LI>`;
                 
-          // node.innerHTML = newItem;
-          // selectedListOl.appendChild(node);
           reRenderDashboard();
 
           // list updated
@@ -554,9 +531,6 @@ body.onload = () => goIndex();
                             0,tableCaption.innerText.length-5).trim();
     let allNotes = getAllNotes(), 
       savingListId = 0, isNew = false;
-
-    // checks if checkbox was clicked
-    helper_checkboxClicked();
     
       if (edited) {
 
@@ -885,6 +859,7 @@ body.onload = () => goIndex();
         userLists = userTodoLists;
         
         // generate links to each list
+        notesToLinks = '';
         notesToLinks = helper_generateLinks(userLists);
       }
       else {
@@ -896,10 +871,8 @@ body.onload = () => goIndex();
       
     dashboardCaption = 
       `${user.firstName} ${user.lastName}'s dashboard`;
-      
-    body.innerHTML = renderDashboardDiv(dashboardCaption,
-                      notesToLinks, notesCaption,
-                      notesItems, buttonClass);
+    
+    reRenderDashboard();
   }
 
 
@@ -936,16 +909,14 @@ body.onload = () => goIndex();
           if (items[i][1] === true) { checked = ' checked '; }
           
         notesItems += `
-          <li><label id="label${(i+1)}"><input type="checkbox"
+          <LI><label id="label${(i+1)}"><input type="checkbox"
             class="chkbox" id="item${(i+1)}"${checked}/>
-            ${items[i][0]}</label></li>`;
+            ${items[i][0]}</label></LI>`;
         let id = `item${(i+1)}`;
       }
-      
-    body.innerHTML = renderDashboardDiv(dashboardCaption,
-                  notesToLinks, notesCaption,
-                  notesItems, buttonClass);
-
+    
+    // rerenders dashboard
+    reRenderDashboard();
     
     
     // gets all checkboxes from items
@@ -1026,7 +997,8 @@ body.onload = () => goIndex();
    */
   function helper_listItemsToJSON() {
     
-    const currentListLi = selectedListOl.getElementsByTagName('LI');
+    const currentListLi = document.getElementById
+      ('selectedListOl').getElementsByTagName('LI');
     currentListItems = [];
     
       if (currentListLi.length>0) {
@@ -1052,5 +1024,4 @@ body.onload = () => goIndex();
         return [];
       }
   }
-
 
