@@ -13,3 +13,8 @@
 - no minor bugs were fixed
 - I moved all HTML into separate functions and its inserted with innerHTML
 - some functions had to be adjusted accordingly, since they were inserting new child nodes
+- all demo data, in `JSON` format, were moved into file `scripts/demoData.js`
+- text literals for injecting HTML are in file `scripts/components.js` in separate functions called to render inside `<BODY>`
+- file `index.htm` has blank body
+- all logic is stored inside `scripts/assignment09.js`
+- CSS plays in this case minor role
