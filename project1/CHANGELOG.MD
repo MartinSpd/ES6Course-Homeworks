@@ -52,7 +52,7 @@
 
 - If you feel like getting fancy, try to find an open-source JS library for hashing passwords (using any hashing function you prefer). Hash the passwords when you receive them and only store the hash rather than the raw password.
 
-- As mentioned above, storing actual users' passwords (in a real life application) is far more complex than this, and often involves many moving parts, but it's still good practice to get used to using hashing libraries.
+- "As mentioned above, storing actual users' passwords (in a real life application) is far more complex than this, and often involves many moving parts, but it's still good practice to get used to using hashing libraries.
 
 
 **PROJECT SOLUTION:**
