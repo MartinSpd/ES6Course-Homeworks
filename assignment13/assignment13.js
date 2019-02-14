@@ -1,7 +1,7 @@
 'use strict';
 
 /*
-  Homework Assignment #12: Object Oriented Programming
+  Homework Assignment #13: Classes
 
 */
 
@@ -12,8 +12,6 @@ function Vehicle(make, model, year, weight) {
   this.Model = model;
   this.Year = year;
   this.Weight = weight;
-  // this.NeedsMaintenance = false;
-  // this.TripsSinceMaintenance = 0;
 }
 
 Vehicle.prototype.getMake = (obj) => {
