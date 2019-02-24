@@ -153,6 +153,42 @@ import { range } from 'lodash';
         
       return number;
      }
+
+
+    /**
+     * checks if there is just one elevator preference
+     */
+
+    helper_changePreference(i, query) {
+
+      let sameUsed = false, elevator = '', index = 0;
+        // checks if last two times same elevator ran
+        if (this.elevatorToUse[i-1] === this.
+            elevatorToUse[i-2]) {
+          sameUsed = true;
+          elevator = this.elevatorToUse[i-1];
+        }
+
+        // if same elevator was running get other
+        // elevator and check if can be engaged
+        if (sameUsed) {
+
+            if (elevator.indexOf('B') !== -1) 
+              { index = 1; }
+            
+            if (query.destination === -1) {
+              elevator = this.elevator[0];
+            }
+
+            if (query.destination === 10) {
+              elevator = this.elevator[1];
+            }
+
+          return this.elevator[index];
+        }
+
+      return null;
+    }
      
     
     /**
@@ -219,6 +255,13 @@ import { range } from 'lodash';
                 location - query.currentFloor );
               this.userQueries[i] = query;          
             
+              let sameElevator = helper_changePreference(
+                i, query);
+
+                if (!sameElevator) {
+                  calledElevator = sameElevator;
+                }
+              
               return calledElevator;
             }
           }
@@ -243,8 +286,14 @@ import { range } from 'lodash';
                 callDistance = Math.abs( (elevator.location 
                   - query.currentFloor) );
                 query.callLasting = callDistance;
-                this.userQueries[i] = query;
-                
+                this.userQueries[i] = query;         
+            
+                let sameElevator = helper_changePreference(
+                  i, query);
+  
+                  if (!sameElevator) {
+                    elevator = sameElevator;
+                  }
                 
                 return elevator;
           }
