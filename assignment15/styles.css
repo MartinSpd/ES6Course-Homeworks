@@ -1,0 +1,9 @@
+button { font: normal 9pt Tahoma; }
+
+div {
+  font: normal 10pt Tahoma;
+  text-align: justify;
+}
+
+#fetchButton2 { color: #C00; }
+
