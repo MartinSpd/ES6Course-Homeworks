@@ -33,6 +33,7 @@ function showPokeData(pokeData) {
     for (let i = 0; i < pokeData.types.length; i++) {
       types.push(pokeData.types[i].type.name);
     }
+  types = types.join(' and ');
     
   // format abilities
   let abilities = [];
@@ -45,20 +46,23 @@ function showPokeData(pokeData) {
   let stats = [];
     for (let i = 0; i < pokeData.stats.length; i++) {
       
-      stats.push(pokeData.stats[i].stat.name
+      stats.push('<br />'+pokeData.stats[i].stat.name
         +' with starting experience at '
         + pokeData.stats[i].base_stat);
     }
   
   // write out data about pokémon
-  const description = `Pokémon ${name} is a ${types.join(', ')} 
+  const description = `Pokémon ${name} is a ${types} 
     pokémon, ${pokeData.height} cm tall and weights ${pokeData
     .weight} g.
+    <br /><br />
     ${name}'s basic experience is ${pokeData
     .base_experience} HP, helds ${pokeData.held_items.length>0 ? 
     pokeData.held_items.length : 'no '} item(s) and masters ${
     pokeData.moves.length} moves.
+    <br /><br />
     ${name} has following abilities: ${abilities.join(', ')}.
+    <br /><br />
     ${name} has following stats: ${stats.join(', ')}.`;
     
   document.getElementById('fetchDiv').innerHTML = 
@@ -100,7 +104,7 @@ function fetchPokeData() {
   fetch(`https://pokeapi.co/api/v2/pokemon/${number}/`)
     .then((data) => data.json() )
     .then(fetchedData => showPokeData(fetchedData) )
-    // .catch(err => alert('sorry, we couldn\'t access '
-    //   +'the API') );
+    .catch(err => alert('sorry, we couldn\'t access '
+      +'the API') );
 }
 
