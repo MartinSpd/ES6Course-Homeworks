@@ -38,7 +38,9 @@ function showPokeData(pokeData) {
   // format abilities
   let abilities = [];
     for (let i = 0; i < pokeData.abilities.length; i++) {
-      abilities.push(pokeData.abilities[i].ability.name);
+      abilities.push(pokeData.abilities[i].ability.name
+        .charAt(0).toUpperCase() + pokeData.abilities[i]
+        .ability.name.slice(1));
     }
   abilities.length>0 ? abilities.length : abilities.push('none');
   
@@ -46,25 +48,31 @@ function showPokeData(pokeData) {
   let stats = [];
     for (let i = 0; i < pokeData.stats.length; i++) {
       
-      stats.push('<br />'+pokeData.stats[i].stat.name
-        +' with starting experience at '
-        + pokeData.stats[i].base_stat);
+      stats.push('<li>'+pokeData.stats[i].stat.name.charAt(0)
+        .toUpperCase() + pokeData.stats[i].stat.name.slice(1)
+        +': '+ pokeData.stats[i].base_stat + ' Exp;</li>');
     }
   
   // write out data about pokémon
-  const description = `Pokémon ${name} is a ${types} 
-    pokémon, ${pokeData.height} cm tall and weights ${pokeData
-    .weight} g.
-    <br /><br />
-    ${name}'s basic experience is ${pokeData
-    .base_experience} HP, helds ${pokeData.held_items.length>0 ? 
-    pokeData.held_items.length : 'no '} item(s) and masters ${
-    pokeData.moves.length} moves.
-    <br /><br />
-    ${name} has following abilities: ${abilities.join(', ')}.
-    <br /><br />
-    ${name} has following stats: ${stats.join(', ')}.`;
+  const description = `
+    <UL>
+    <li>Pokémon <strong>${name}</strong> is a ${types} 
+    pokémon, ${pokeData.height} cm tall and weights 
+    ${pokeData.weight} g.
+    </li><li>
+    ${name}'s basic experience is 
+    ${pokeData.base_experience} HP, helds 
+    ${pokeData.held_items.length>0 ? pokeData.held_items.
+    length : 'no '} item(s) and masters 
+    ${pokeData.moves.length} moves.
+    </li><li>
+    ${name} has following abilities: 
+    ${abilities.join(', ')}.
+    </li><li>
+    ${name} has following starting stats: <ul>
+    ${stats.join('')}</ul></li></ul>`;
     
+    // add innerHTML
   document.getElementById('fetchDiv').innerHTML = 
     '<button id="fetchButton2">refresh</button><br /><br />'
     + description;
