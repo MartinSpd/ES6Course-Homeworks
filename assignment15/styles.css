@@ -25,6 +25,7 @@ ul > li > ul > li {
 .images li {
   display: inline;
   list-style-type: none;
+  padding-right: 30px;
 }
 
 #fetchButton2 { color: #C00; }

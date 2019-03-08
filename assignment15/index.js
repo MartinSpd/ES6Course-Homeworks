@@ -28,8 +28,9 @@ function showPokeData(pokeData) {
   let pokeImages = '';
     for (const property in pokeData.sprites) {
         if (pokeData.sprites[property] !== null) {
-          pokeImages += '<li><img src="' 
-          + pokeData.sprites[property] + '" /></li>';
+          pokeImages += `<li><img src="
+            ${pokeData.sprites[property]}"
+          title="${property}"/></li>`;
         }
     }
     
@@ -68,16 +69,17 @@ function showPokeData(pokeData) {
     ${pokeImages}</ul></li>
     <li>Pokémon <strong>${name}</strong> is a ${types} 
     pokémon, ${pokeData.height} cm tall and weights 
-    ${pokeData.weight} g.
+    ${(Number.parseInt(pokeData.weight)).
+      toLocaleString('en-us')} g.
     </li><li>
     ${name}'s basic experience is 
-    ${pokeData.base_experience} HP, helds 
+    ${pokeData.base_experience}, helds 
     ${pokeData.held_items.length>0 ? pokeData.held_items.
     length : 'no '} item(s) and masters 
     ${pokeData.moves.length} moves.
     </li><li>
     ${name} has following abilities: 
-    ${abilities.join(', ')}.
+    <u>${abilities.join('</u>, <u>')}</u>.
     </li><li>
     ${name} has following starting stats: <ul>
     ${stats.join('')}</ul></li></ul>`;
