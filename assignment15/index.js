@@ -24,6 +24,15 @@ document.getElementById('fetchButton1').
    
 function showPokeData(pokeData) {
   
+  // images of pokémon
+  let pokeImages = '';
+    for (const property in pokeData.sprites) {
+        if (pokeData.sprites[property] !== null) {
+          pokeImages += '<li><img src="' 
+          + pokeData.sprites[property] + '" /></li>';
+        }
+    }
+    
   // formats name
   const name = pokeData.name.charAt(0).toUpperCase()
     + pokeData.name.slice(1);
@@ -55,7 +64,8 @@ function showPokeData(pokeData) {
   
   // write out data about pokémon
   const description = `
-    <UL>
+    <UL><li class="first"><ul class = "images">
+    ${pokeImages}</ul></li>
     <li>Pokémon <strong>${name}</strong> is a ${types} 
     pokémon, ${pokeData.height} cm tall and weights 
     ${pokeData.weight} g.
