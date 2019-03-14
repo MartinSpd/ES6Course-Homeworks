@@ -18,7 +18,7 @@ module.exports.calculate = async (event, context, callback) => {
     }),
   };
 
-  callback(null, JSON.stringify({ message: reply.body.message }));
+  callback(null, JSON.stringify({ message: message }));
 
 };
 
