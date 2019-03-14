@@ -34,9 +34,7 @@ module.exports.calculate = async (event, context, callback) => {
   callback(null, {
     statusCode: 200,
     body: JSON.stringify({
-      message: `Second square of number ${
-        number} is ${(!isNaN(number) ? Math.pow(
-        number, 2) : 0)}.`
+      message: 'message'
     })
   });
 };
