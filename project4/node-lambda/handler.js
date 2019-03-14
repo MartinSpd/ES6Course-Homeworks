@@ -17,7 +17,7 @@ module.exports.calculate = async (event, context, callback) => {
       number: number,
       square: square,
       message: `Second square of number ${
-        number} is ${square}.`
+        number} is ${0}.`
     })
   });
 };
