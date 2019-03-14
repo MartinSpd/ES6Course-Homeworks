@@ -12,21 +12,21 @@ module.exports.calculate = async (event, context, callback) => {
     number} is ${(!isNaN(number) ? Math.pow(
     number, 2) : 0)}.`;
   
-  const successMessage = {
+  return {
     statusCode: 200,
     body: JSON.stringify({
       message: message
     })
   };
-  const errorMessage = {
-    statusCode: 400,
-    body: JSON.stringify({
-      message: err.message
-    })
-  };
+  // const errorMessage = {
+  //   statusCode: 400,
+  //   body: JSON.stringify({
+  //     message: err.message
+  //   })
+  // };
 
-  try { return successMessage; } 
-    catch (err) { return errorMessage; }
+  // try { return successMessage; } 
+  //   catch (err) { return errorMessage; }
   
   // return successMessage;
   // callback(errorMessage, successMessage);
