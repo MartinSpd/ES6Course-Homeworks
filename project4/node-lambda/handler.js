@@ -2,7 +2,7 @@
 
 module.exports.calculate = async (event, context) => {
 
-  // const number = 2;
+  const number = 2;
   // // const square = ;
   // const message = `Second square of number ${number} is 
   //   ${((!number.isNaN()) ? Math.pow(number, 2) : 0)}`;
@@ -10,7 +10,7 @@ module.exports.calculate = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: `Second square of number ${2} is ${Math.pow(2, 2)}`,
+      message: `Second square of number ${number} is ${Math.pow(number, 2)}`,
       input: event,
     }),
   };
