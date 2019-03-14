@@ -8,9 +8,9 @@
 module.exports.calculate = async (event, context, callback) => {
 
   const number = event.pathParameters.number;
-  const squared = (!isNaN(number) ? Math.pow(
-    number, 2) : 0);
-    
+  const squared = (Math.round(!isNaN(number) ? Math.pow(
+    number, 2)*1000 : 0)/1000);
+
   callback(null, {
     statusCode: 200,
     body: JSON.stringify({
