@@ -1,14 +1,18 @@
 'use strict';
 
-module.exports.hello = async (event, context) => {
+module.exports.calculate = async (event, context) => {
+
+  const number = 2;
+  const square = (!number.isNaN() ? Math.pow(number, 2) : 0);
+
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'Expecto Petronum',
-      input: event,
+      number: number,
+      square: square,
+      message: `Second square of number ${number} is ${square}`,
     }),
   };
 
-  // Use this code if you don't use the http event with the LAMBDA-PROXY integration
-  // return { message: 'Go Serverless v1.0! Your function executed successfully!', event };
 };
+
