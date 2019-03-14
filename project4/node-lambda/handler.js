@@ -13,8 +13,7 @@ module.exports.calculate = async (event, context, callback) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: message,
-      input: event,
+      message: message
     }),
   };
 
