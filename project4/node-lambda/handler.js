@@ -12,14 +12,14 @@ module.exports.calculate = async (event, context, callback) => {
   //   number} is ${(!isNaN(number) ? Math.pow(
   //   number, 2) : 0)}.`;
   
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: `Second square of number ${
-        number} is ${(!isNaN(number) ? Math.pow(
-        number, 2) : 0)}.`
-    })
-  };
+  // return {
+  //   statusCode: 200,
+  //   body: JSON.stringify({
+  //     message: `Second square of number ${
+  //       number} is ${(!isNaN(number) ? Math.pow(
+  //       number, 2) : 0)}.`
+  //   })
+  // };
   // const errorMessage = {
   //   statusCode: 400,
   //   body: JSON.stringify({
@@ -31,6 +31,6 @@ module.exports.calculate = async (event, context, callback) => {
   //   catch (err) { return errorMessage; }
   
   // return successMessage;
-  // callback(null, successMessage);
+  callback(null, 'successMessage');
 };
 
