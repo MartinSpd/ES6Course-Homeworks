@@ -9,7 +9,7 @@ module.exports.calculate = async (event, context) => {
     statusCode: 200,
     body: JSON.stringify({
       message: `Second square of number ${number} is ${square}`,
-      event: event,
+      input: event,
     }),
   };
 
