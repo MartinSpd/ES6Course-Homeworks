@@ -10,10 +10,13 @@ module.exports.calculate = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'message',
+      message: 'message '+2*2,
       input: event,
     }),
   };
 
 };
-
+/*
+ serverless deploy
+ serverless invoke local --function calculate --data '{"pathParameters": {"numbers":4}}'
+*/
