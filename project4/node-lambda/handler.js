@@ -18,13 +18,13 @@ module.exports.calculate = async (event, context, callback) => {
       message: message
     })
   };
-  // const errorMessage = {
-  //   statusCode: 400,
-  //   body: JSON.stringify({
-  //     message: err.message
-  //   })
-  // };
-  return successMessage;
-  // callback(errorMessage, successMessage);
+  const errorMessage = {
+    statusCode: 400,
+    body: JSON.stringify({
+      message: err.message
+    })
+  };
+  // return successMessage;
+  callback(errorMessage, successMessage);
 };
 
