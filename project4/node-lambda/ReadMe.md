@@ -15,6 +15,7 @@ to work with them I favored using AWS for this example.
 - deployment: with command `serverless deploy` on `amazonaws.com`;
 - I copied generated endpoint URL to browser and I replaced string with curly brackets with a number
 - after that square of that number was generated
+- 
 
 ## Prerequisites
 1. install `serverless` globally;
