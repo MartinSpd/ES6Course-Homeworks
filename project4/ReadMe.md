@@ -8,6 +8,8 @@ to work with them I favored using AWS for this example.
   on AWS website and take screenshot from there;
 - I did It a bit differently, because I wanted write and store Lambda locally and use one of frameworks available to achieve that: `serverless.js`;
 - screenshots are in directory `/assets`.
+- as you can see on screenshots I rechecked if entered value is a number and if was, then counting second square proceded
+- I also polished rounding to 3 decimal places
 
 ## Architecture
 - for shortness of time I use generated endpoint on `amazonaws.com`;
