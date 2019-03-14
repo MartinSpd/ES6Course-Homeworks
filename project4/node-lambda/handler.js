@@ -1,12 +1,16 @@
 'use strict';
 
-module.exports.calculate = async (event, context) => {
+/*
+    Project #4: AWS Lambda
 
-  const number = 2;
-  const message = `Second square of number ${number} is 
-    ${(!isNaN(number) ? Math.pow(number, 2) : 0)}`;
+*/
 
-  return {
+module.exports.calculate = async (event, context, callback) => {
+
+  const number = event.pathParameters.number;
+  const message = `Second square of number ${number} is ${(!isNaN(number) ? Math.pow(number, 2) : 0)}.`;
+
+  const reply = {
     statusCode: 200,
     body: JSON.stringify({
       message: message,
@@ -14,8 +18,7 @@ module.exports.calculate = async (event, context) => {
     }),
   };
 
+  callback(null, JSON.stringify({ message: reply.body.message }));
+
 };
-/*
- serverless deploy
- serverless invoke local --function calculate --data '{"pathParameters": {"numbers":4}}'
-*/
+
