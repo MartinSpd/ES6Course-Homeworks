@@ -24,7 +24,11 @@ module.exports.calculate = async (event, context, callback) => {
       message: err.message
     })
   };
+
+  try { return successMessage } 
+    catch (err) { return errorMessage }
+  
   // return successMessage;
-  callback(errorMessage, successMessage);
+  // callback(errorMessage, successMessage);
 };
 
