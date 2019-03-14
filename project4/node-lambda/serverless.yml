@@ -3,6 +3,7 @@ service: project4
 provider:
   name: aws
   runtime: nodejs8.10
+  region: europe-central-1
 
 functions:
   calculate:
