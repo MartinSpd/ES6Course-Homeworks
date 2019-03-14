@@ -31,6 +31,6 @@ module.exports.calculate = async (event, context, callback) => {
   //   catch (err) { return errorMessage; }
   
   // return successMessage;
-  callback(null, 'successMessage');
+  callback(null, JSON.stringify('{ "message": "successMessage" }'));
 };
 
