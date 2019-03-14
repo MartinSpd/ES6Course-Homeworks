@@ -13,7 +13,8 @@ to work with them I favored using AWS for this example.
 - for shortness of time I use generated endpoint on `amazonaws.com`;
 - lambda, however, together with YAML file was written locally;
 - deployment: with command `serverless deploy` on `amazonaws.com`;
-- I copied generated endpointy to browser and string after last forward slash I replaced with a number and square of that number was generated
+- I copied generated endpoint URL to browser and I replaced string with curly brackets with a number
+- after that square of that number was generated
 
 ## Prerequisites
 1. install `serverless` globally;
