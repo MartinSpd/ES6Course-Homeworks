@@ -15,7 +15,13 @@ to work with them I favored using AWS for this example.
 - deployment: with command `serverless deploy` on `amazonaws.com`;
 - I copied generated endpoint URL to browser and I replaced string with curly brackets with a number
 - after that square of that number was generated
-- 
+- e.g.:
+  - replace
+    `... .amazonaws.com/dev/square-number/{number}`;
+  - with
+    `... .amazonaws.com/dev/square-number/4`;
+  - you will see a response: 
+    `{"message":"Second square of number 4 is 16."}`
 
 ## Prerequisites
 1. install `serverless` globally;
