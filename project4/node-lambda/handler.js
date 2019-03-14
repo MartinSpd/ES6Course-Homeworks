@@ -22,7 +22,7 @@ module.exports.calculate = async (event, context, callback) => {
       message: err.message
     })
   };
-
-  callback(errorMessage, successMessage);
+  return successMessage;
+  // callback(errorMessage, successMessage);
 };
 
