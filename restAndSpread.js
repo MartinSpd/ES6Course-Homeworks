@@ -15,44 +15,74 @@
  * object expression to be expanded in places where 
  * zero or more key-value pairs (for object literals) 
  * are expected.
+ * 
  */
 
 
 /** use with an array */
 const numbers = [1, 2, 3];
-console.log('18: ', ...numbers);
+console.log('24: ', ...numbers);
 // expected output: 1 2 3
 
-console.log('21: ', numbers);
+console.log('27: ', numbers);
 // expected output: [1, 2, 3]
 
 
 /** use with a function */
 function myFunction(x, y, z) {
-  console.log('26: ', ...args);
+  console.log('33: ', ...args);
 }
-var args = [0, 1, 2];
+const args = [0, 1, 2];
 myFunction(...args);
 // expected output: 0 1 2
 
 
 /* copy an array */
-var arr = [1, 2, 3];
-var arr2 = [...arr]; // like arr.slice()
+const arr = [1, 2, 3];
+const arr2 = [...arr]; // like arr.slice()
 arr2.push(4); 
-console.log('36: ', arr2);
+console.log('44: ', arr2);
 
 
 /** shallow object cloning */
 const obj1 = { foo: 'bar', x: 42 };
 const obj2 = { foo: 'baz', y: 13 };
 const merge = ( ...objects ) =>  { 
-  console.log('42', ...objects) };
-var mergedObj = merge ( obj1, obj2);
+  console.log('51: ', ...objects)
+};
+const mergedObj = merge ( obj1, obj2);
 
 
 
 /**
  * REST OPERATOR:
+ * The rest parameter syntax allows us to represent 
+ * an indefinite number of arguments as an array.
+ * 
+ * A function's last parameter can be prefixed with 
+ * ... which will cause all remaining (user supplie
+ * d) arguments to be placed within a "standard" Ja
+ * vaScript array. Only the last parameter can be a 
+ * "rest parameter".
  * 
  */
+ 
+ 
+ /** using rest */
+ function myFunction(a, b, ...manyMoreArgs) {
+  console.log('73: a = ', a); 
+  console.log('74: b = ', b);
+  console.log('75: manyMoreArgs = ', manyMoreArgs); 
+  console.log('76: manyMoreArgs = ', ...manyMoreArgs); 
+}
+
+myFunction('one', 'two', 'three', 'four', 'five', 'six');
+
+// expected output:
+// a = one
+// b = two
+// manyMoreArgs = [three, four, five, six]
+// manyMoreArgs = three four five six
+ 
+ 
+ 
