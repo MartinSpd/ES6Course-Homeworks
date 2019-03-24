@@ -1,0 +1,110 @@
+
+/*
+ * Tags:
+ */
+
+ body {
+  font: normal 10pt Tahoma;
+  color: black;
+}
+
+button, input {
+border: 1px solid #DDD;
+border-radius: 3px;
+font-size: 10pt;
+margin-top: 20px;
+}
+
+h1 {
+font: bold 16pt Tahoma;
+color: darkred;
+}
+
+h2 {
+font: bold 14pt Tahoma;
+text-decoration: underline;
+}
+
+h3 { font: bold 12pt Tahoma; }
+
+ul {
+padding-top: 10px;
+padding-bottom: 20px;
+}
+
+li {
+cursor: pointer;
+left: -20px;
+position: relative;
+}
+
+
+
+/*
+* Classes:
+*/
+
+.at { color: #999; }
+
+.disabled {
+color: #999;
+cursor: default;
+}
+
+.label { text-decoration: underline; }
+
+.alarmDiv { padding-top: 20px; }
+
+.notificationYear {
+border: 0;
+margin-top: 10px;
+padding: 3px;
+width: 33px;
+}
+
+.notificationDate {
+border: 0;
+margin-top: 10px;
+padding: 3px;
+width: 18px;
+}
+
+.notificationMessage {
+border: 1px solid #999;
+border-radius: 3px;
+margin-top: 5px;
+margin-bottom: 10px;
+padding: 3px;
+}
+
+.notificationYear:hover, 
+.notificationDate:hover,
+.notificationMessage:hover {
+background-color: #FFE;
+}
+
+.notificationActionButton {
+border: 1px solid #DDD;
+border-radius: 3px;
+font: bold 9pt Tahoma;
+margin-top: 5px;
+margin-bottom: 5px;
+padding: 3px;
+padding-left: 8px;
+padding-right: 8px;
+}
+
+
+
+/*
+* IDs:
+*/
+
+#deleteAlarmEdit, 
+#cancelAlarmEdit, 
+#cancelNewAlarm  {
+font: normal 9pt Tahoma;
+margin-left: 10px;
+}
+
+

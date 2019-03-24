@@ -1,0 +1,11 @@
+{
+  "name": "assignment17",
+  "version": "0.0.0",
+  "description": "Simple allarm based on Notification API",
+  "main": "index.htm",
+  "author": "Martin Spodniak",
+  "license": "MIT",
+  "dependencies": {
+    "simplepicker": "^2.0.0"
+  }
+}
