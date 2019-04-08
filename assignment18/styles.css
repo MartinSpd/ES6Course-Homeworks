@@ -1,0 +1,59 @@
+
+#map {
+  height: 550px;
+}
+
+
+#message {
+  background-color: rgba(100, 100, 100, 0.4);
+  border-radius: 3px;
+  color: rgba(240, 240, 120, 0.9);
+  cursor: pointer;
+  font: bold 9pt 'Tahoma', 'Times', 'Courier';
+  left: 10px;
+  margin: 10px;
+  padding: 10px;
+  position: relative;
+  top: -10px;
+  visibility: hidden;
+  width: 260px;
+  z-index: 1;
+}
+
+
+#right-panel select, #right-panel input {
+  font-size: 10px;
+}
+
+
+#right-panel {
+  font-family: 'Roboto', 'sans-serif';
+  line-height: 30px;
+  padding-left: 10px;
+  float: right;
+  font-size: 10px;
+  height: 100%;
+  width: 390px;
+  overflow: auto;
+}
+
+
+@media print {
+  #map {
+    height: 500px;
+    margin: 0;
+  }
+
+  #right-panel {
+    float: none;
+    width: auto;
+  }
+}
+
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
