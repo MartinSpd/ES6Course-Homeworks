@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Home assignment #18: Maps and Sets</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      #map {
+        height: 450px;
+      }
+      
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+    
+    <script>
+    let map;
+    function initMap() {
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 48.147312, lng: 17.107044},
+        zoom: 14
+      });
+
+      
+      // geolocation - in my browser won't work, even it's not 
+      // blocked. Hence hardcoded marker position
+      /* if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          
+          map.setCenter(pos);
+        }, () => { handleError(); });
+      } else { handleError(); }*/
+      
+      const marker = drawMarker({lat: 48.147312, lng: 17.107044}, map);
+    }
+
+      /**
+       * handles geolocation errors
+       * 
+       */
+
+    function handleError(error) {
+
+      let emessage = '';
+
+        switch(error.code) {
+          case error.PERMISSION_DENIED:
+            emessage = 'User denied the request for Geolocation.';
+            break;
+          case error.POSITION_UNAVAILABLE:
+            emessage = 'Location information is unavailable.';
+            break;
+          case error.TIMEOUT:
+            emessage = 'The request to get user location timed out.';
+            break;
+          case error.UNKNOWN_ERROR:
+            emessage = 'An unknown error occurred.';
+            break;
+        }
+
+      message.style.visibility ='visible';
+      message.innerText = emessage;
+    }
+
+
+
+      /**
+       * returns marker object
+       *
+       */
+
+    function drawMarker(position, map) {
+
+      return new google.maps.Marker({
+        position: position,
+        map: map
+      });
+    }
+    
+    onload = () => {
+
+    // event for notification Div
+    message.addEventListener('click', (event) => {
+        message.style.visibility = 'hidden';
+    });
+
+    // loading message handling
+    message.style.visibility = 'visible';
+    message.innerText = 'Loading ...';
+        
+    setTimeout(() => {
+      message.style.visibility = 'hidden';
+      message.innerText = '';
+        }, 1000);
+    }
+    </script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkUOdZ5y7hMm0yrcCQoCvLwzdM6M8s5qk&callback=initMap">
+    </script>
+    
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="message"></div>
+
+  </body>
+</html>
