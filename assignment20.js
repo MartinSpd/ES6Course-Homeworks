@@ -39,7 +39,7 @@ const fiveProjects = [
     favorite: false,
     proposedFunctions: [
       {
-        functionName: 'getMilils',
+        functionName: 'getMilis',
         args: [],
         return: {
           type: number,
