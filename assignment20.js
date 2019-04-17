@@ -7,7 +7,9 @@
 
 const fiveProjects = [
   {
-    projectName: 'Moment.js',
+    projectName: 'Luxon.js',
+    url: null,
+    GitHub: 'https://github.com/moment/luxon',
     favorite: true,
     proposedFunctions: [
       {
@@ -49,59 +51,39 @@ const fiveProjects = [
         }
       }
     ],
-    reason: `I didn't find in documentation a function to localize month names 
+    choiceReason: `I didn't find in documentation a function to localize month names 
     in multiple languages. Might be usefull, when you want long format.
     Using maps and arrays.`
   },
   {
-    projectName: 'Luxon.js',
+    projectName: 'Maptalks.js',
+    url: 'http://maptalks.org/maptalks.js/',
+    GitHub: 'https://github.com/maptalks/maptalks.js',
     favorite: false,
     proposedFunctions: [
       {
-        functionName: 'getLocaleMonthName',
+        functionName: 'setSize',
         args: [
           {
-            args: 'monthIndex',
+            args: 'object',
+            type: object,
+            description: ' to be changed'
+          },
+          {
+            args: 'size',
             type: number,
-            description: 'defines month index, limited to range 0 - 11'
-          },
-          {
-            args: 'lang',
-            type: string,
-            description: '2 or 3 letter country code for localization of month name'
+            description: 'new size of an object'
           }
         ],
-        return: {
-          type: string,
-          description: 'full month name in localized language'
-        }
-      },
-      {
-        functionName: 'getMonthfromLocaleName',
-        args: [
-          {
-            args: 'monthName',
-            type: string,
-            description: 'full month name in localized language'
-          },
-          {
-            args: 'lang',
-            type: string,
-            description: 'for localization of language'
-          }
-        ],
-        return: {
-          type: number,
-          description: 'month index'
-        }
+        return: { }
       }
     ],
-    reason: `I didn't find in documentation a function to localize month names 
-    in multiple languages. Might be usefull, when you want long format.
-    Using maps and arrays.`
+    choiceReason: `I want to get to know basics of Open GL.`
   },
   {
     projectName: 'Spacetime.js',
+    url: null,
+    GitHub: 'https://github.com/spencermountain/spacetime',
     favorite: false,
     proposedFunctions: [
       {
@@ -113,10 +95,12 @@ const fiveProjects = [
         }
       }
     ],
-    reason: 'I find this function to be handy for this kind of library'
+    choiceReason: 'I find this function to be handy for this kind of library'
   },
   {
     projectName: 'Zuck.js',
+    url: null,
+    GitHub: 'https://github.com/ramon82/zuck.js',
     favorite: false,
     proposedFunctions: [
       {
@@ -148,11 +132,13 @@ const fiveProjects = [
         }
       }
     ],
-    reason: `It's a original script of fb and insta stories. 
+    choiceReason: `It's a original script of fb and insta stories. 
     I think it can be extended with new functions.`
   },
   {
     projectName: 'Draggable.js',
+    url: '',
+    GitHub: 'https://github.com/Shopify/draggable',
     favorite: false,
     proposedFunctions: [
       {
@@ -169,16 +155,15 @@ const fiveProjects = [
             description: 'class name to be set'
           }
         ],
-        return: {
-          type: null,
-          description: ''
-        }
+        return: { }
       }
     ],
-    reason: `I found in documentation this kind of function is missing aside 
+    choiceReason: `I found in documentation this kind of function is missing aside 
     get function.`
   }
 ];
+
+const source = 'https://medium.mybridge.co/amazing-javascript-projects-for-the-past-year-v-2018-2f114c6bd70a';
 
 console.log(fiveProjects);
 
