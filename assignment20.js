@@ -7,95 +7,47 @@
 
 const fiveProjects = [
   {
-    projectName: 'Luxon.js',
+    projectName: 'Draggable.js',
     url: null,
-    GitHub: 'https://github.com/moment/luxon',
-    favorite: true,
-    proposedFunctions: [
-      {
-        functionName: 'getLocaleMonthName',
-        args: [
-          {
-            args: 'monthIndex',
-            type: number,
-            description: 'defines month index, limited to range 0 - 11'
-          },
-          {
-            args: 'lang',
-            type: string,
-            description: '2 or 3 letter country code for localization of month name'
-          }
-        ],
-        return: {
-          type: string,
-          description: 'full month name in localized language'
-        }
-      },
-      {
-        functionName: 'getMonthfromLocaleName',
-        args: [
-          {
-            args: 'monthName',
-            type: string,
-            description: 'full month name in localized language'
-          },
-          {
-            args: 'lang',
-            type: string,
-            description: 'for localization of language'
-          }
-        ],
-        return: {
-          type: number,
-          description: 'month index'
-        }
-      }
-    ],
-    choiceReason: `I didn't find in documentation a function to localize month names 
-    in multiple languages. Might be usefull, when you want long format.
-    Using maps and arrays.`
-  },
-  {
-    projectName: 'Maptalks.js',
-    url: 'http://maptalks.org/maptalks.js/',
-    GitHub: 'https://github.com/maptalks/maptalks.js',
+    GitHub: 'https://github.com/Shopify/draggable',
     favorite: false,
     proposedFunctions: [
       {
-        functionName: 'setSize',
+        functionName: 'setClassName',
         args: [
           {
-            args: 'object',
-            type: object,
-            description: ' to be changed'
+            args: 'element',
+            type: HTMLElement,
+            description: `element's class name to be changed`
           },
           {
-            args: 'size',
-            type: number,
-            description: 'new size of an object'
+            args: 'className',
+            type: string,
+            description: 'class name to be set'
           }
         ],
         return: { }
       }
     ],
-    choiceReason: `I want to get to know basics of Open GL.`
+    choiceReason: `I found in documentation this kind of function is missing aside 
+    get function.`
   },
   {
-    projectName: 'Spacetime.js',
+    projectName: 'Luxron.js',
     url: null,
-    GitHub: 'https://github.com/spencermountain/spacetime',
+    GitHub: 'https://github.com/moment/luxon',
     favorite: false,
     proposedFunctions: [
       {
-        functionName: 'getDateBorderDistance',
+        functionName: 'getMilils',
         args: [],
         return: {
-          type: JSON,
-          description: 'data about location, where is currently date border'
+          type: number,
+          description: 'number of miliseconds since 1. 1 1970.'
         }
       }
     ],
-    choiceReason: 'I find this function to be handy for this kind of library'
+    choiceReason: `It's a simple version of Moment.js without this kind of function.`
   },
   {
     projectName: 'Zuck.js',
@@ -136,30 +88,46 @@ const fiveProjects = [
     I think it can be extended with new functions.`
   },
   {
-    projectName: 'Draggable.js',
-    url: '',
-    GitHub: 'https://github.com/Shopify/draggable',
+    projectName: 'Spacetime.js',
+    url: null,
+    GitHub: 'https://github.com/spencermountain/spacetime',
+    favorite: true,
+    proposedFunctions: [
+      {
+        functionName: 'getDateBorderDistance',
+        args: [],
+        return: {
+          type: JSON,
+          description: 'data about location, where is currently date border'
+        }
+      }
+    ],
+    choiceReason: 'I find this function to be handy for this kind of library'
+  },
+  {
+    projectName: 'Maptalks.js',
+    url: 'http://maptalks.org/maptalks.js/',
+    GitHub: 'https://github.com/maptalks/maptalks.js',
     favorite: false,
     proposedFunctions: [
       {
-        functionName: 'setClassName',
+        functionName: 'setSize',
         args: [
           {
-            args: 'element',
-            type: HTMLElement,
-            description: `element's class name to be changed`
+            args: 'object',
+            type: object,
+            description: ' to be changed'
           },
           {
-            args: 'className',
-            type: string,
-            description: 'class name to be set'
+            args: 'size',
+            type: number,
+            description: 'new size of an object'
           }
         ],
         return: { }
       }
     ],
-    choiceReason: `I found in documentation this kind of function is missing aside 
-    get function.`
+    choiceReason: `I want to get to know basics of Open GL.`
   }
 ];
 
