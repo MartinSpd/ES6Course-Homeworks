@@ -1,5 +1,5 @@
 {
-  "name": "part2",
+  "name": "Final Exam part2",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -7,7 +7,7 @@
     "start": "node ./index.js",
     "test": "npm test"
   },
-  "author": "",
+  "author": "Martin Spodniak",
   "license": "ISC",
   "dependencies": {
     "spacetime": "^5.7.0"
