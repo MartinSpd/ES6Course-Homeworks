@@ -1,0 +1,17 @@
+{
+  "site" : "Stack Overflow",
+  "answeredBy" : "Martin Spd",
+  "questions" : [
+    "https://stackoverflow.com/questions/55889085/visual-studio-code-align-function-parameters-on-multiple-lines/55889400#55889400",
+    "https://stackoverflow.com/questions/55888796/trying-to-execute-two-javascript-files-together-with-window-onload/55889498#55889498",
+    "https://stackoverflow.com/questions/55898884/submit-form-with-specified-commit-parameter/55899197#55899197",
+    "https://stackoverflow.com/questions/55898681/convert-time-to-client-local-time-in-javascript/55899613#55899613",
+    "https://stackoverflow.com/questions/55898394/detect-if-user-select-or-typed-new-value-in-datalist/55899760#55899760",
+    "https://stackoverflow.com/questions/55898197/how-to-get-the-value-of-the-input-fields-and-store-it-in-an-array/55899955#55899955",
+    "https://stackoverflow.com/questions/55897872/array-will-not-replace-value-at-index/55900332#55900332",
+    "https://stackoverflow.com/questions/55897009/automatically-generate-a-tag-from-img-tag/55901170#55901170",
+    "https://stackoverflow.com/questions/55896841/how-can-i-get-the-largest-number-value-along-with-the-username-from-this-array/55901284#55901284",
+    "https://stackoverflow.com/questions/55896292/getting-multiple-values-from-checked-checkboxes-javascript/55901555#55901555"
+  ]
+}
+
